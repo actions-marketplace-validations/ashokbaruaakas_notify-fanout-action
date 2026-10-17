@@ -171,6 +171,8 @@ export async function run(deps: Dependencies = createDefaultDependencies()): Pro
       else log.warning(`${summary} Not failing the step (fail-on: ${inputs.failOn}).`);
     }
   } catch (error) {
+    // Outputs are always set, so later steps can read them with fromJSON().
+    writeOutputs(io, redactor, []);
     io.setFailed(redactor.redact(describe(error)));
   }
 }

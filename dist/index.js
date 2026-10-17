@@ -28458,6 +28458,7 @@ ${preview(p.rendered)}`);
       else log.warning(`${summary2} Not failing the step (fail-on: ${inputs.failOn}).`);
     }
   } catch (error2) {
+    writeOutputs(io, redactor, []);
     io.setFailed(redactor.redact(describe2(error2)));
   }
 }

@@ -225,6 +225,7 @@ describe('configuration errors', () => {
   it('fails the step with a clear message', async () => {
     const recorded = await runAction({ targets: '- { provider: fake, channel: x }' });
     expect(recorded.failed).toBe('targets[0]: token is required');
+    expect(recorded.outputs).toEqual({ results: '[]', 'success-count': '0', 'failure-count': '0' });
   });
 
   it('warns once per unknown variable', async () => {
