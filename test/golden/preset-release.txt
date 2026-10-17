@@ -1,0 +1,7 @@
+Dry run: main (fake)
+#general [success]
+✅ Release v1.2.0 published
+· Repository: octo/app
+· Triggered by: octocat
+> View release: https://github.com/octo/app/releases/tag/v1.2.0
+> View run: https://github.com/octo/app/actions/runs/9001

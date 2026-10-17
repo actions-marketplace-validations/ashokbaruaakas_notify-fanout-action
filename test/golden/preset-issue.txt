@@ -1,0 +1,7 @@
+Dry run: main (fake)
+#general [success]
+✅ Issue #12: Crash when `x` < 0
+· Repository: octo/app
+· Event: issues
+· Triggered by: octocat
+> View issue: https://github.com/octo/app/issues/12

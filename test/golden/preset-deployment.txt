@@ -1,0 +1,9 @@
+Dry run: main (fake)
+#general [success]
+✅ Deployment succeeded
+· Environment: production
+· Repository: octo/app
+· Branch: main
+- Commit: 0123456
+· Triggered by: octocat
+> View run: https://github.com/octo/app/actions/runs/9001

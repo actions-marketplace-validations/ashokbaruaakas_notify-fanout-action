@@ -1,0 +1,10 @@
+Dry run: main (fake)
+#general [success]
+✅ CI succeeded · PR #7
+- Pull request: Add <b>bold</b> & [links](x) support
+· Repository: octo/app
+· Branch: feature/snake_case
+· Triggered by: octocat
+- Commit: abcdef1
+> View pull request: https://github.com/octo/app/pull/7
+> View run: https://github.com/octo/app/actions/runs/9001

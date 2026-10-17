@@ -1,0 +1,7 @@
+Dry run: main (fake)
+#general [success]
+✅ CI succeeded on main
+· Repository: octo/app
+- Commit: 0123456 Fix <login> & **retry** logic
+· Pushed by: octocat
+> View run: https://github.com/octo/app/actions/runs/9001

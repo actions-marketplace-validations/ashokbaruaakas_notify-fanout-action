@@ -22,6 +22,9 @@ Node 24 (`.nvmrc`; the action itself runs on `node24`).
 - ESM throughout (`"type": "module"`), because `@actions/core` 3.x is ESM-only. Relative imports use the `.js` extension (`NodeNext` resolution).
 - TypeScript is pinned to 6.0.x, since typescript-eslint does not support TypeScript 7 yet. ESLint uses `strictTypeChecked`. `tsconfig.json` sets `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`.
 - `src/index.ts` is the bundle entry and only calls `run()`. Keep logic in `src/main.ts` and below so tests can import it without side effects.
+- `run(deps)` takes every side effect as an injected `Dependencies` value: runner I/O (`ActionIO` in `src/io.ts`), env, file reads, fetch, sleep and random. Tests drive it with the recorder and the `fake` provider in `test/harness.ts` and `test/fake-provider.ts`; no real providers are needed.
+- Golden files live in `test/golden/` (written with `toMatchFileSnapshot`). After an intended rendering change, run `npx vitest run -u` and review the diff.
+- The only runtime dependencies are `@actions/core` and `yaml`. The GitHub context is read straight from env and `GITHUB_EVENT_PATH`, not through `@actions/github`. Validation is hand-written with `ObjectReader` (`src/config/reader.ts`), which also rejects unknown keys.
 - Workflows pin third-party actions to full commit SHAs, with the version in a trailing comment.
 
 ## Implementation phases
@@ -35,7 +38,7 @@ The code is split into six layers that must stay independent. `src/main.ts` only
 1. `src/config/`: reads inputs, parses `targets` (YAML; JSON is valid YAML), validates. Simple-mode inputs (`telegram-bot-token`, `telegram-chat-id`) produce a single target. Per-target fields override global ones. Targets without an `id` get one auto-generated (`telegram-1`, ...).
 2. `src/context/`: maps the GitHub context and event payload to `{{VARIABLE}}` values.
 3. `src/message/`: the provider-neutral `Message` model (title, body, status, fields, links), plus presets, templates and escaping.
-4. `src/providers/`: one self-contained folder per platform, registered in `providers/index.ts`. Each one implements `validate`, `secrets`, `render` and `send`. **`render` must be pure (no network) and `send` does network only.** Adding a provider must not touch the engine beyond registering it.
+4. `src/providers/`: one self-contained folder per platform, registered in `providers/index.ts`. Each one implements `Provider` in `providers/types.ts`: `validate`, `secrets`, `escapeRaw`, `render` and `send`. **`render` must be pure (no network) and `send` does network only.** Adding a provider must not touch the engine beyond registering it. The registry binds each target's config into a `BoundTarget`, so the rest of the code never handles provider-specific types. Use `providers/http.ts` for requests: it applies the timeout signal, turns network errors into retryable `DeliveryError`s, classifies HTTP statuses and never puts the URL in errors. Markdown bodies are parsed with `parseMarkdown` (`message/markdown.ts`) and converted from the resulting tree.
 5. `src/engine/`: fan-out with bounded concurrency, retry with exponential backoff and jitter, and per-target results. Targets are independent: one failure never blocks or cancels another.
 6. `src/report/`: outputs (`results`, `success-count`, `failure-count`), job summary, logging and masking.
 
@@ -43,10 +46,13 @@ The code is split into six layers that must stay independent. `src/main.ts` only
 
 ## Rules that are easy to get wrong
 
-- **Escaping:** variable values are escaped for the target's format (for example, HTML-escaped for Telegram HTML). Template text itself is not escaped. Unknown variables render as empty and emit a warning; they do not fail the run.
-- **Retries:** retry on network errors, HTTP 429 and 5xx. Do not retry on other 4xx errors. Honor Telegram's `parameters.retry_after` and the `Retry-After` header.
+- **Escaping:** only the body has a format: `text`, `markdown` (neutral subset) or `raw` (provider-native, passed through). Variable values in the body are escaped for that format: `escapeMarkdown` for markdown, and the provider's `escapeRaw` for raw. Title, fields and links are always plain text, which providers escape when rendering. Template text is never escaped, and neither is `{{MESSAGE}}` inside a template, because it is already in the body's format. In the markdown subset a backslash escape works everywhere, including inside code. Unknown variables render as empty and emit one warning each; they do not fail the run.
+- **Content precedence:** the body comes from the target's `template_file`/`message`, then the global `template-file`/`message`, then the preset. `{{TITLE}}` and `{{MESSAGE}}` are the resolved title and message. Fields and links whose value renders empty are dropped.
+- **Target independence:** a failure to render or load a template fails only that target (0 attempts). A config error fails the whole step.
+- **Retries:** retry on network errors, HTTP 429 and 5xx. Do not retry on other 4xx errors. Honor Telegram's `parameters.retry_after` and the `Retry-After` header by passing `retryAfterMs` on the `DeliveryError`. A requested wait over 60s fails the target instead. `retries: 3` means up to 4 attempts.
+- **`action.yml`:** never write `${{ … }}` in it, even inside a description. The runner evaluates it and the action fails to load.
 - **`fail-on`:** `any` (default) fails the step if any target failed. `all` fails it only if every target failed. `none` only warns.
-- **Secrets:** call `core.setSecret` on every secret before any logging. Telegram tokens sit in the request URL path, so redact URLs in all logs and error messages. Never log full payloads or headers outside `debug`, and keep `debug` masked too.
+- **Secrets:** call `core.setSecret` on every secret before any logging. The runner masks secrets only in logs, so all logs, outputs and the job summary also pass through `Redactor`. Redact individual values, not serialized JSON, so outputs stay valid. Telegram tokens sit in the request URL path, so redact URLs in all logs and error messages. Never log full payloads or headers outside `debug`, and keep `debug` masked too.
 - **Naming:** `action.yml` inputs use kebab-case. Keys inside `targets` entries use snake_case.
 - **Telegram:** the message limit is 4096 characters. Split at paragraph or line boundaries, and never break HTML tags (close and reopen them across chunks). Edit-in-place is stateless: `message_id` comes back through the `results` output and a later step passes it in as `edit_message_id`.
 

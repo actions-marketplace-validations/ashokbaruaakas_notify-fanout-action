@@ -1,0 +1,35 @@
+Dry run: markdown (fake)
+#md [failure]
+Add <b>bold</b> & [links](x) support
+<b>PR:</b> Add <b>bold</b> & [links](x) support on <code>feature/snake_case</code>
+- Pull request: Add <b>bold</b> & [links](x) support
+· Repository: octo/app
+· Branch: feature/snake_case
+· Triggered by: octocat
+- Commit: abcdef1
+> View pull request: https://github.com/octo/app/pull/7
+> View run: https://github.com/octo/app/actions/runs/9001
+
+Dry run: text (fake)
+#txt [failure]
+Add <b>bold</b> & [links](x) support
+**PR:** Add <b>bold</b> & [links](x) support on `feature/snake_case`
+- Pull request: Add <b>bold</b> & [links](x) support
+· Repository: octo/app
+· Branch: feature/snake_case
+· Triggered by: octocat
+- Commit: abcdef1
+> View pull request: https://github.com/octo/app/pull/7
+> View run: https://github.com/octo/app/actions/runs/9001
+
+Dry run: raw (fake)
+#raw [failure]
+Add <b>bold</b> & [links](x) support
+<b>Add &lt;b&gt;bold&lt;/b&gt; &amp; [links](x) support</b>
+- Pull request: Add <b>bold</b> & [links](x) support
+· Repository: octo/app
+· Branch: feature/snake_case
+· Triggered by: octocat
+- Commit: abcdef1
+> View pull request: https://github.com/octo/app/pull/7
+> View run: https://github.com/octo/app/actions/runs/9001

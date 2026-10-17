@@ -1,0 +1,69 @@
+Dry run: main (fake)
+#general [success]
+✅ CI succeeded
+· Repository: octo/app
+· Branch: main
+- Commit: 0123456
+· Triggered by: octocat
+· Run: 42
+> View run: https://github.com/octo/app/actions/runs/9001
+
+Dry run: main (fake)
+#general [failure]
+❌ CI failed
+· Repository: octo/app
+· Branch: main
+- Commit: 0123456
+· Triggered by: octocat
+· Run: 42
+> View run: https://github.com/octo/app/actions/runs/9001
+
+Dry run: main (fake)
+#general [cancelled]
+⚪ CI was cancelled
+· Repository: octo/app
+· Branch: main
+- Commit: 0123456
+· Triggered by: octocat
+· Run: 42
+> View run: https://github.com/octo/app/actions/runs/9001
+
+Dry run: main (fake)
+#general [warning]
+⚠️ CI finished with warnings
+· Repository: octo/app
+· Branch: main
+- Commit: 0123456
+· Triggered by: octocat
+· Run: 42
+> View run: https://github.com/octo/app/actions/runs/9001
+
+Dry run: main (fake)
+#general [info]
+ℹ️ CI
+· Repository: octo/app
+· Branch: main
+- Commit: 0123456
+· Triggered by: octocat
+· Run: 42
+> View run: https://github.com/octo/app/actions/runs/9001
+
+Dry run: main (fake)
+#general [started]
+⏳ CI started
+· Repository: octo/app
+· Branch: main
+- Commit: 0123456
+· Triggered by: octocat
+· Run: 42
+> View run: https://github.com/octo/app/actions/runs/9001
+
+Dry run: main (fake)
+#general [info]
+ℹ️ CI Rolled back
+· Repository: octo/app
+· Branch: main
+- Commit: 0123456
+· Triggered by: octocat
+· Run: 42
+> View run: https://github.com/octo/app/actions/runs/9001
