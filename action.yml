@@ -4,7 +4,7 @@ author: Ashok
 
 inputs:
   status:
-    description: Message status. Pass `${{ job.status }}` for job results; also accepts `started`, `warning`, `info`.
+    description: Message status. Pass the `job.status` expression for job results; also accepts `started`, `warning`, `info`.
     required: false
     default: info
   preset:
