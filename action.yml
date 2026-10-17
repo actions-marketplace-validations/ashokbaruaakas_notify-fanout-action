@@ -1,0 +1,77 @@
+name: Notify Fanout
+description: Send one CI/CD message to Telegram and other chat platforms from a single step, configured per target.
+author: Ashok
+
+inputs:
+  status:
+    description: Message status. Pass `${{ job.status }}` for job results; also accepts `started`, `warning`, `info`.
+    required: false
+    default: info
+  preset:
+    description: 'Message preset: auto | workflow | deployment | release | pull_request | issue | push | custom.'
+    required: false
+    default: auto
+  title:
+    description: Override the preset title.
+    required: false
+  message:
+    description: Override the preset body. Supports `{{VARIABLES}}`.
+    required: false
+  fields:
+    description: 'YAML/JSON list of `{name, value, short?}`.'
+    required: false
+  links:
+    description: 'YAML/JSON list of `{label, url}`.'
+    required: false
+  template-file:
+    description: Global template file path, relative to the repository root.
+    required: false
+  format:
+    description: 'Body format: text | markdown (neutral subset).'
+    required: false
+    default: text
+  targets:
+    description: YAML/JSON list of targets (multi-target mode).
+    required: false
+  telegram-bot-token:
+    description: Simple-mode shortcut for a single Telegram target.
+    required: false
+  telegram-chat-id:
+    description: Simple-mode shortcut for a single Telegram target.
+    required: false
+  fail-on:
+    description: 'When to fail the step: any | all | none.'
+    required: false
+    default: any
+  retries:
+    description: Retry attempts for retryable errors.
+    required: false
+    default: '3'
+  timeout-seconds:
+    description: Per-request timeout in seconds.
+    required: false
+    default: '15'
+  concurrency:
+    description: Maximum number of parallel sends.
+    required: false
+    default: '5'
+  dry-run:
+    description: Render each target's message without sending.
+    required: false
+    default: 'false'
+  debug:
+    description: Verbose logs (secrets stay masked).
+    required: false
+    default: 'false'
+
+outputs:
+  results:
+    description: 'JSON array of per-target results: `[{ id, provider, ok, attempts, message_id?, error? }]`.'
+  success-count:
+    description: Number of targets delivered successfully.
+  failure-count:
+    description: Number of targets that failed after retries.
+
+runs:
+  using: node24
+  main: dist/index.js
