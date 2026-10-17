@@ -42,6 +42,13 @@ describe('parseMarkdown', () => {
     ]);
   });
 
+  it('allows balanced parentheses in link URLs', () => {
+    expect(parseMarkdown('[w](https://en.wikipedia.org/wiki/A_(b)) end')).toEqual([
+      { type: 'link', url: 'https://en.wikipedia.org/wiki/A_(b)', children: [text('w')] },
+      text(' end'),
+    ]);
+  });
+
   it('keeps unmatched or misplaced markers as text', () => {
     expect(parseMarkdown('a ** b')).toEqual([text('a ** b')]);
     expect(parseMarkdown('**open')).toEqual([text('**open')]);

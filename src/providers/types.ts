@@ -8,6 +8,11 @@ export interface SendContext {
   attempt: number;
   fetch: typeof fetch;
   debug: (message: string) => void;
+  /**
+   * Kept across attempts for the same target, so a send made of several
+   * requests can resume after a retry instead of repeating what succeeded.
+   */
+  state: Map<string, unknown>;
 }
 
 export interface SendResult {

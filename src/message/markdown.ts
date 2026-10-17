@@ -187,10 +187,14 @@ function findUnescaped(source: string, char: string, from: number): number {
 
 function parseLinkTarget(source: string, from: number): { url: string; end: number } | null {
   if (source.charAt(from) !== '(') return null;
+  // Balanced parentheses may appear in the URL, as in CommonMark.
+  let depth = 0;
   for (let i = from + 1; i < source.length; i++) {
     const ch = source.charAt(i);
     if (ch === '\\' && PUNCTUATION.test(source.charAt(i + 1))) i++;
     else if (ch === '\n') return null;
+    else if (ch === '(') depth++;
+    else if (ch === ')' && depth > 0) depth--;
     else if (ch === ')') {
       const url = unescape(source.slice(from + 1, i)).trim();
       return url === '' ? null : { url, end: i + 1 };

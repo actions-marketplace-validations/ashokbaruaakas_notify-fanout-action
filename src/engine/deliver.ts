@@ -63,6 +63,7 @@ export async function deliverAll(
 
 async function deliver(job: DeliveryJob, options: EngineOptions): Promise<DeliveryResult> {
   const base = { id: job.id, provider: job.provider };
+  const state = new Map<string, unknown>();
   for (let attempt = 1; ; attempt++) {
     try {
       const result = await job.send({
@@ -71,6 +72,7 @@ async function deliver(job: DeliveryJob, options: EngineOptions): Promise<Delive
         attempt,
         fetch: options.fetch,
         debug: options.debug,
+        state,
       });
       return {
         ...base,

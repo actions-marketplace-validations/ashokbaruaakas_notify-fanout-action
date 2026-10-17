@@ -13,6 +13,7 @@ function context(fetchImpl: typeof fetch): SendContext {
     attempt: 1,
     fetch: fetchImpl,
     debug: vi.fn(),
+    state: new Map(),
   };
 }
 

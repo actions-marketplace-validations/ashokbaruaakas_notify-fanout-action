@@ -59,10 +59,12 @@ export class ObjectReader {
     throw new ConfigError(`${key} must be true or false`);
   }
 
+  /** Accepts numbers and numeric strings. A blank string counts as unset (e.g. an empty step output). */
   optionalInteger(key: string, min: number, max: number): number | undefined {
     const value = this.take(key);
     if (value === undefined || value === null) return undefined;
-    const number = typeof value === 'string' && value.trim() !== '' ? Number(value) : value;
+    if (typeof value === 'string' && value.trim() === '') return undefined;
+    const number = typeof value === 'string' ? Number(value) : value;
     if (typeof number !== 'number' || !Number.isInteger(number) || number < min || number > max) {
       throw new ConfigError(`${key} must be an integer from ${String(min)} to ${String(max)}`);
     }
