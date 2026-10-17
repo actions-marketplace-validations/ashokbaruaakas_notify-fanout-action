@@ -1,9 +1,15 @@
 {
   "name": "notify-fanout",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Send one CI/CD message to Telegram and other chat platforms from a single GitHub Action step.",
   "license": "MIT",
+  "author": "Ashok Barua",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashokbaruaakas/notify-fanout-action.git"
+  },
+  "homepage": "https://github.com/ashokbaruaakas/notify-fanout-action#readme",
   "type": "module",
   "engines": {
     "node": ">=24"

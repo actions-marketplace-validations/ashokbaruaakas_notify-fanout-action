@@ -1,6 +1,9 @@
 name: Notify Fanout
-description: Send one CI/CD message to Telegram and other chat platforms from a single step, configured per target.
-author: Ashok
+description: Send CI/CD notifications to one or many Telegram chats from one step, with presets, templates and per-target options.
+author: Ashok Barua
+branding:
+  icon: send
+  color: blue
 
 inputs:
   status:

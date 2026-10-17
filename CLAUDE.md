@@ -31,6 +31,14 @@ Node 24 (`.nvmrc`; the action itself runs on `node24`).
 
 Work goes phase by phase (spec §9): 0 scaffold → 1 core engine with a fake provider → 2 Telegram → 3 hardening and v1.0.0 → 4 Slack/Discord → 5 extras. After each phase, run its acceptance checks, then stop and report. Do not build features from a later phase early.
 
+Status: phases 0–3 are done, and v1.0.0 is the stable release. Phases 4 and 5 are on hold at the user's request; don't start them unless asked.
+
+## Releases and user-facing docs
+
+- `v1` is a moving major tag that users pin to (`ashokbaruaakas/notify-fanout-action@v1`). Anything that breaks existing workflows needs a v2.
+- To release: move the `CHANGELOG.md` `Unreleased` entries into a version section, bump `package.json`, commit, and push a `vX.Y.Z` tag. `release.yml` verifies the tag, version and `dist/`, creates the GitHub release from the changelog, and moves `vX`. Marketplace listing happens in the web UI, not via API.
+- User docs live in `README.md` and `docs/` (`config.md`, `presets.md`, `providers/telegram.md`, `recipes.md`). Keep them in step with behavior changes: limits, variables, preset wording and error hints are all documented there.
+
 ## Architecture (spec §4.7, §7)
 
 The code is split into six layers that must stay independent. `src/main.ts` only wires them together:
