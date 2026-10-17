@@ -1,0 +1,92 @@
+{
+  "text": {
+    "method": "sendMessage",
+    "requests": [
+      {
+        "chat_id": "-100200300",
+        "parse_mode": "MarkdownV2",
+        "text": "*✅ PR <b\\>x</b\\> & \\[y\\]\\(z\\) \\*a\\_b\\* \\`c\\` 1\\.5\\! \\#tag \\(q\\) \\{r\\} \\>s \\~t \\|u\\| \\-v \\+w \\=x \\\\*\n\nBody: PR <b\\>x</b\\> & \\[y\\]\\(z\\) \\*a\\_b\\* \\`c\\` 1\\.5\\! \\#tag \\(q\\) \\{r\\} \\>s \\~t \\|u\\| \\-v \\+w \\=x \\\\\n\n*Branch:* feature/snake\\_case\n*Commit:* PR <b\\>x</b\\> & \\[y\\]\\(z\\) \\*a\\_b\\* \\`c\\` 1\\.5\\! \\#tag \\(q\\) \\{r\\} \\>s \\~t \\|u\\| \\-v \\+w \\=x \\\\\nLocal: file:///etc/hosts",
+        "reply_markup": {
+          "inline_keyboard": [
+            [
+              {
+                "text": "View run",
+                "url": "https://github.com/o/r/actions/runs/1"
+              },
+              {
+                "text": "View PR",
+                "url": "https://github.com/o/r/pull/7"
+              }
+            ],
+            [
+              {
+                "text": "Docs",
+                "url": "https://docs.test/a_(b)"
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "markdown": {
+    "method": "sendMessage",
+    "requests": [
+      {
+        "chat_id": "-100200300",
+        "parse_mode": "MarkdownV2",
+        "text": "*✅ PR <b\\>x</b\\> & \\[y\\]\\(z\\) \\*a\\_b\\* \\`c\\` 1\\.5\\! \\#tag \\(q\\) \\{r\\} \\>s \\~t \\|u\\| \\-v \\+w \\=x \\\\*\n\n*Build* _failed_ on `feat_x` — [details](https://x.test/a_(b\\))\n```sh\nnpm test && echo \"<done>\"\n```\nEscaped: \\*not bold\\* and 1\\.5 \\> 1\n\n*Branch:* feature/snake\\_case\n*Commit:* PR <b\\>x</b\\> & \\[y\\]\\(z\\) \\*a\\_b\\* \\`c\\` 1\\.5\\! \\#tag \\(q\\) \\{r\\} \\>s \\~t \\|u\\| \\-v \\+w \\=x \\\\\nLocal: file:///etc/hosts",
+        "reply_markup": {
+          "inline_keyboard": [
+            [
+              {
+                "text": "View run",
+                "url": "https://github.com/o/r/actions/runs/1"
+              },
+              {
+                "text": "View PR",
+                "url": "https://github.com/o/r/pull/7"
+              }
+            ],
+            [
+              {
+                "text": "Docs",
+                "url": "https://docs.test/a_(b)"
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "raw": {
+    "method": "sendMessage",
+    "requests": [
+      {
+        "chat_id": "-100200300",
+        "parse_mode": "MarkdownV2",
+        "text": "*✅ PR <b\\>x</b\\> & \\[y\\]\\(z\\) \\*a\\_b\\* \\`c\\` 1\\.5\\! \\#tag \\(q\\) \\{r\\} \\>s \\~t \\|u\\| \\-v \\+w \\=x \\\\*\n\n__native__ ||markdown||\n\n*Branch:* feature/snake\\_case\n*Commit:* PR <b\\>x</b\\> & \\[y\\]\\(z\\) \\*a\\_b\\* \\`c\\` 1\\.5\\! \\#tag \\(q\\) \\{r\\} \\>s \\~t \\|u\\| \\-v \\+w \\=x \\\\\nLocal: file:///etc/hosts",
+        "reply_markup": {
+          "inline_keyboard": [
+            [
+              {
+                "text": "View run",
+                "url": "https://github.com/o/r/actions/runs/1"
+              },
+              {
+                "text": "View PR",
+                "url": "https://github.com/o/r/pull/7"
+              }
+            ],
+            [
+              {
+                "text": "Docs",
+                "url": "https://docs.test/a_(b)"
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -25,18 +25,21 @@ jobs:
       - run: npm run build
 
   smoke:
-    # Runs the committed bundle as a real action step. No real providers are
-    # registered yet (Phase 2 adds Telegram), so the action must load and then
-    # reject the target with a configuration error.
+    # Runs the committed bundle as a real action step, as a dry run.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: notify
         uses: ./
-        continue-on-error: true
         with:
           dry-run: true
-          targets: '[{ provider: telegram, token: dummy, chat_id: "1" }]'
-      - name: Expect a configuration error
-        if: steps.notify.outcome != 'failure'
-        run: exit 1
+          status: success
+          telegram-bot-token: '123456:dry-run-token'
+          telegram-chat-id: '-1001234567890'
+      - name: Check outputs
+        env:
+          SUCCESS: ${{ steps.notify.outputs.success-count }}
+          RESULTS: ${{ steps.notify.outputs.results }}
+        run: |
+          echo "$RESULTS"
+          test "$SUCCESS" = 1

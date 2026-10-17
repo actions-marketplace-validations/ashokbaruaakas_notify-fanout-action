@@ -1,0 +1,89 @@
+{
+  "text": {
+    "method": "sendMessage",
+    "requests": [
+      {
+        "chat_id": "-100200300",
+        "text": "✅ PR <b>x</b> & [y](z) *a_b* `c` 1.5! #tag (q) {r} >s ~t |u| -v +w =x \\\n\nBody: PR <b>x</b> & [y](z) *a_b* `c` 1.5! #tag (q) {r} >s ~t |u| -v +w =x \\\n\nBranch: feature/snake_case\nCommit: PR <b>x</b> & [y](z) *a_b* `c` 1.5! #tag (q) {r} >s ~t |u| -v +w =x \\\nLocal: file:///etc/hosts",
+        "reply_markup": {
+          "inline_keyboard": [
+            [
+              {
+                "text": "View run",
+                "url": "https://github.com/o/r/actions/runs/1"
+              },
+              {
+                "text": "View PR",
+                "url": "https://github.com/o/r/pull/7"
+              }
+            ],
+            [
+              {
+                "text": "Docs",
+                "url": "https://docs.test/a_(b)"
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "markdown": {
+    "method": "sendMessage",
+    "requests": [
+      {
+        "chat_id": "-100200300",
+        "text": "✅ PR <b>x</b> & [y](z) *a_b* `c` 1.5! #tag (q) {r} >s ~t |u| -v +w =x \\\n\nBuild failed on feat_x — details (https://x.test/a_(b))\nnpm test && echo \"<done>\"\nEscaped: *not bold* and 1.5 > 1\n\nBranch: feature/snake_case\nCommit: PR <b>x</b> & [y](z) *a_b* `c` 1.5! #tag (q) {r} >s ~t |u| -v +w =x \\\nLocal: file:///etc/hosts",
+        "reply_markup": {
+          "inline_keyboard": [
+            [
+              {
+                "text": "View run",
+                "url": "https://github.com/o/r/actions/runs/1"
+              },
+              {
+                "text": "View PR",
+                "url": "https://github.com/o/r/pull/7"
+              }
+            ],
+            [
+              {
+                "text": "Docs",
+                "url": "https://docs.test/a_(b)"
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "raw": {
+    "method": "sendMessage",
+    "requests": [
+      {
+        "chat_id": "-100200300",
+        "text": "✅ PR <b>x</b> & [y](z) *a_b* `c` 1.5! #tag (q) {r} >s ~t |u| -v +w =x \\\n\nplain *raw*\n\nBranch: feature/snake_case\nCommit: PR <b>x</b> & [y](z) *a_b* `c` 1.5! #tag (q) {r} >s ~t |u| -v +w =x \\\nLocal: file:///etc/hosts",
+        "reply_markup": {
+          "inline_keyboard": [
+            [
+              {
+                "text": "View run",
+                "url": "https://github.com/o/r/actions/runs/1"
+              },
+              {
+                "text": "View PR",
+                "url": "https://github.com/o/r/pull/7"
+              }
+            ],
+            [
+              {
+                "text": "Docs",
+                "url": "https://docs.test/a_(b)"
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  }
+}

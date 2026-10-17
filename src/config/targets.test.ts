@@ -7,7 +7,7 @@ import { readInputs } from './inputs.js';
 import { ObjectReader } from './reader.js';
 import { parseTargets } from './targets.js';
 
-// Stands in for the Telegram provider, which arrives in Phase 2.
+// Registered under the Telegram id so these tests stay independent of its option validation.
 const telegramStub: Provider<{ token: string; chatId: string }, string> = {
   id: 'telegram',
   validate(raw) {

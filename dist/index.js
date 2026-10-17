@@ -96,13 +96,13 @@ var require_identity = __commonJS({
 var require_visit = __commonJS({
   "node_modules/yaml/dist/visit.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var BREAK = /* @__PURE__ */ Symbol("break visit");
     var SKIP = /* @__PURE__ */ Symbol("skip children");
     var REMOVE = /* @__PURE__ */ Symbol("remove node");
     function visit(node, visitor) {
       const visitor_ = initVisitor(visitor);
-      if (identity2.isDocument(node)) {
+      if (identity3.isDocument(node)) {
         const cd = visit_(null, node.contents, visitor_, Object.freeze([node]));
         if (cd === REMOVE)
           node.contents = null;
@@ -114,12 +114,12 @@ var require_visit = __commonJS({
     visit.REMOVE = REMOVE;
     function visit_(key, node, visitor, path) {
       const ctrl = callVisitor(key, node, visitor, path);
-      if (identity2.isNode(ctrl) || identity2.isPair(ctrl)) {
+      if (identity3.isNode(ctrl) || identity3.isPair(ctrl)) {
         replaceNode(key, path, ctrl);
         return visit_(key, ctrl, visitor, path);
       }
       if (typeof ctrl !== "symbol") {
-        if (identity2.isCollection(node)) {
+        if (identity3.isCollection(node)) {
           path = Object.freeze(path.concat(node));
           for (let i = 0; i < node.items.length; ++i) {
             const ci = visit_(i, node.items[i], visitor, path);
@@ -132,7 +132,7 @@ var require_visit = __commonJS({
               i -= 1;
             }
           }
-        } else if (identity2.isPair(node)) {
+        } else if (identity3.isPair(node)) {
           path = Object.freeze(path.concat(node));
           const ck = visit_("key", node.key, visitor, path);
           if (ck === BREAK)
@@ -150,7 +150,7 @@ var require_visit = __commonJS({
     }
     async function visitAsync(node, visitor) {
       const visitor_ = initVisitor(visitor);
-      if (identity2.isDocument(node)) {
+      if (identity3.isDocument(node)) {
         const cd = await visitAsync_(null, node.contents, visitor_, Object.freeze([node]));
         if (cd === REMOVE)
           node.contents = null;
@@ -162,12 +162,12 @@ var require_visit = __commonJS({
     visitAsync.REMOVE = REMOVE;
     async function visitAsync_(key, node, visitor, path) {
       const ctrl = await callVisitor(key, node, visitor, path);
-      if (identity2.isNode(ctrl) || identity2.isPair(ctrl)) {
+      if (identity3.isNode(ctrl) || identity3.isPair(ctrl)) {
         replaceNode(key, path, ctrl);
         return visitAsync_(key, ctrl, visitor, path);
       }
       if (typeof ctrl !== "symbol") {
-        if (identity2.isCollection(node)) {
+        if (identity3.isCollection(node)) {
           path = Object.freeze(path.concat(node));
           for (let i = 0; i < node.items.length; ++i) {
             const ci = await visitAsync_(i, node.items[i], visitor, path);
@@ -180,7 +180,7 @@ var require_visit = __commonJS({
               i -= 1;
             }
           }
-        } else if (identity2.isPair(node)) {
+        } else if (identity3.isPair(node)) {
           path = Object.freeze(path.concat(node));
           const ck = await visitAsync_("key", node.key, visitor, path);
           if (ck === BREAK)
@@ -217,31 +217,31 @@ var require_visit = __commonJS({
     function callVisitor(key, node, visitor, path) {
       if (typeof visitor === "function")
         return visitor(key, node, path);
-      if (identity2.isMap(node))
+      if (identity3.isMap(node))
         return visitor.Map?.(key, node, path);
-      if (identity2.isSeq(node))
+      if (identity3.isSeq(node))
         return visitor.Seq?.(key, node, path);
-      if (identity2.isPair(node))
+      if (identity3.isPair(node))
         return visitor.Pair?.(key, node, path);
-      if (identity2.isScalar(node))
+      if (identity3.isScalar(node))
         return visitor.Scalar?.(key, node, path);
-      if (identity2.isAlias(node))
+      if (identity3.isAlias(node))
         return visitor.Alias?.(key, node, path);
       return void 0;
     }
     function replaceNode(key, path, node) {
       const parent = path[path.length - 1];
-      if (identity2.isCollection(parent)) {
+      if (identity3.isCollection(parent)) {
         parent.items[key] = node;
-      } else if (identity2.isPair(parent)) {
+      } else if (identity3.isPair(parent)) {
         if (key === "key")
           parent.key = node;
         else
           parent.value = node;
-      } else if (identity2.isDocument(parent)) {
+      } else if (identity3.isDocument(parent)) {
         parent.contents = node;
       } else {
-        const pt = identity2.isAlias(parent) ? "alias" : "scalar";
+        const pt = identity3.isAlias(parent) ? "alias" : "scalar";
         throw new Error(`Cannot replace node with ${pt} parent`);
       }
     }
@@ -254,7 +254,7 @@ var require_visit = __commonJS({
 var require_directives = __commonJS({
   "node_modules/yaml/dist/doc/directives.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var visit = require_visit();
     var escapeChars = {
       "!": "%21",
@@ -397,10 +397,10 @@ var require_directives = __commonJS({
         const lines = this.yaml.explicit ? [`%YAML ${this.yaml.version || "1.2"}`] : [];
         const tagEntries = Object.entries(this.tags);
         let tagNames;
-        if (doc && tagEntries.length > 0 && identity2.isNode(doc.contents)) {
+        if (doc && tagEntries.length > 0 && identity3.isNode(doc.contents)) {
           const tags = {};
           visit.visit(doc.contents, (_key, node) => {
-            if (identity2.isNode(node) && node.tag)
+            if (identity3.isNode(node) && node.tag)
               tags[node.tag] = true;
           });
           tagNames = Object.keys(tags);
@@ -425,7 +425,7 @@ var require_directives = __commonJS({
 var require_anchors = __commonJS({
   "node_modules/yaml/dist/doc/anchors.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var visit = require_visit();
     function anchorIsValid(anchor) {
       if (/[\x00-\x19\s,[\]{}]/.test(anchor)) {
@@ -472,7 +472,7 @@ var require_anchors = __commonJS({
         setAnchors: () => {
           for (const source of aliasObjects) {
             const ref = sourceObjects.get(source);
-            if (typeof ref === "object" && ref.anchor && (identity2.isScalar(ref.node) || identity2.isCollection(ref.node))) {
+            if (typeof ref === "object" && ref.anchor && (identity3.isScalar(ref.node) || identity3.isCollection(ref.node))) {
               ref.node.anchor = ref.anchor;
             } else {
               const error2 = new Error("Failed to resolve repeated object (this should not happen)");
@@ -545,12 +545,12 @@ var require_applyReviver = __commonJS({
 var require_toJS = __commonJS({
   "node_modules/yaml/dist/nodes/toJS.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     function toJS(value, arg, ctx) {
       if (Array.isArray(value))
         return value.map((v, i) => toJS(v, String(i), ctx));
       if (value && typeof value.toJSON === "function") {
-        if (!ctx || !identity2.hasAnchor(value))
+        if (!ctx || !identity3.hasAnchor(value))
           return value.toJSON(arg, ctx);
         const data = { aliasCount: 0, count: 1, res: void 0 };
         ctx.anchors.set(value, data);
@@ -576,11 +576,11 @@ var require_Node = __commonJS({
   "node_modules/yaml/dist/nodes/Node.js"(exports) {
     "use strict";
     var applyReviver = require_applyReviver();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var toJS = require_toJS();
     var NodeBase = class {
       constructor(type) {
-        Object.defineProperty(this, identity2.NODE_TYPE, { value: type });
+        Object.defineProperty(this, identity3.NODE_TYPE, { value: type });
       }
       /** Create a copy of this node.  */
       clone() {
@@ -591,7 +591,7 @@ var require_Node = __commonJS({
       }
       /** A plain JavaScript representation of this node. */
       toJS(doc, { mapAsMap, maxAliasCount, onAnchor, reviver } = {}) {
-        if (!identity2.isDocument(doc))
+        if (!identity3.isDocument(doc))
           throw new TypeError("A document argument is required");
         const ctx = {
           anchors: /* @__PURE__ */ new Map(),
@@ -618,12 +618,12 @@ var require_Alias = __commonJS({
     "use strict";
     var anchors = require_anchors();
     var visit = require_visit();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Node = require_Node();
     var toJS = require_toJS();
     var Alias = class extends Node.NodeBase {
       constructor(source) {
-        super(identity2.ALIAS);
+        super(identity3.ALIAS);
         this.source = source;
         Object.defineProperty(this, "tag", {
           set() {
@@ -645,7 +645,7 @@ var require_Alias = __commonJS({
           nodes = [];
           visit.visit(doc, {
             Node: (_key, node) => {
-              if (identity2.isAlias(node) || identity2.hasAnchor(node))
+              if (identity3.isAlias(node) || identity3.hasAnchor(node))
                 nodes.push(node);
             }
           });
@@ -707,11 +707,11 @@ var require_Alias = __commonJS({
       }
     };
     function getAliasCount(doc, node, anchors2) {
-      if (identity2.isAlias(node)) {
+      if (identity3.isAlias(node)) {
         const source = node.resolve(doc);
         const anchor = anchors2 && source && anchors2.get(source);
         return anchor ? anchor.count * anchor.aliasCount : 0;
-      } else if (identity2.isCollection(node)) {
+      } else if (identity3.isCollection(node)) {
         let count = 0;
         for (const item of node.items) {
           const c = getAliasCount(doc, item, anchors2);
@@ -719,7 +719,7 @@ var require_Alias = __commonJS({
             count = c;
         }
         return count;
-      } else if (identity2.isPair(node)) {
+      } else if (identity3.isPair(node)) {
         const kc = getAliasCount(doc, node.key, anchors2);
         const vc = getAliasCount(doc, node.value, anchors2);
         return Math.max(kc, vc);
@@ -734,13 +734,13 @@ var require_Alias = __commonJS({
 var require_Scalar = __commonJS({
   "node_modules/yaml/dist/nodes/Scalar.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Node = require_Node();
     var toJS = require_toJS();
     var isScalarValue = (value) => !value || typeof value !== "function" && typeof value !== "object";
     var Scalar = class extends Node.NodeBase {
       constructor(value) {
-        super(identity2.SCALAR);
+        super(identity3.SCALAR);
         this.value = value;
       }
       toJSON(arg, ctx) {
@@ -765,7 +765,7 @@ var require_createNode = __commonJS({
   "node_modules/yaml/dist/doc/createNode.js"(exports) {
     "use strict";
     var Alias = require_Alias();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Scalar = require_Scalar();
     var defaultTagPrefix = "tag:yaml.org,2002:";
     function findTagObject(value, tagName, tags) {
@@ -779,12 +779,12 @@ var require_createNode = __commonJS({
       return tags.find((t) => t.identify?.(value) && !t.format);
     }
     function createNode(value, tagName, ctx) {
-      if (identity2.isDocument(value))
+      if (identity3.isDocument(value))
         value = value.contents;
-      if (identity2.isNode(value))
+      if (identity3.isNode(value))
         return value;
-      if (identity2.isPair(value)) {
-        const map = ctx.schema[identity2.MAP].createNode?.(ctx.schema, null, ctx);
+      if (identity3.isPair(value)) {
+        const map = ctx.schema[identity3.MAP].createNode?.(ctx.schema, null, ctx);
         map.items.push(value);
         return map;
       }
@@ -816,7 +816,7 @@ var require_createNode = __commonJS({
             ref.node = node2;
           return node2;
         }
-        tagObj = value instanceof Map ? schema[identity2.MAP] : Symbol.iterator in Object(value) ? schema[identity2.SEQ] : schema[identity2.MAP];
+        tagObj = value instanceof Map ? schema[identity3.MAP] : Symbol.iterator in Object(value) ? schema[identity3.SEQ] : schema[identity3.MAP];
       }
       if (onTagObj) {
         onTagObj(tagObj);
@@ -840,7 +840,7 @@ var require_Collection = __commonJS({
   "node_modules/yaml/dist/nodes/Collection.js"(exports) {
     "use strict";
     var createNode = require_createNode();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Node = require_Node();
     function collectionFromPath(schema, path, value) {
       let v = value;
@@ -884,7 +884,7 @@ var require_Collection = __commonJS({
         const copy = Object.create(Object.getPrototypeOf(this), Object.getOwnPropertyDescriptors(this));
         if (schema)
           copy.schema = schema;
-        copy.items = copy.items.map((it) => identity2.isNode(it) || identity2.isPair(it) ? it.clone(schema) : it);
+        copy.items = copy.items.map((it) => identity3.isNode(it) || identity3.isPair(it) ? it.clone(schema) : it);
         if (this.range)
           copy.range = this.range.slice();
         return copy;
@@ -900,7 +900,7 @@ var require_Collection = __commonJS({
         else {
           const [key, ...rest] = path;
           const node = this.get(key, true);
-          if (identity2.isCollection(node))
+          if (identity3.isCollection(node))
             node.addIn(rest, value);
           else if (node === void 0 && this.schema)
             this.set(key, collectionFromPath(this.schema, rest, value));
@@ -917,7 +917,7 @@ var require_Collection = __commonJS({
         if (rest.length === 0)
           return this.delete(key);
         const node = this.get(key, true);
-        if (identity2.isCollection(node))
+        if (identity3.isCollection(node))
           return node.deleteIn(rest);
         else
           throw new Error(`Expected YAML collection at ${key}. Remaining path: ${rest}`);
@@ -931,16 +931,16 @@ var require_Collection = __commonJS({
         const [key, ...rest] = path;
         const node = this.get(key, true);
         if (rest.length === 0)
-          return !keepScalar && identity2.isScalar(node) ? node.value : node;
+          return !keepScalar && identity3.isScalar(node) ? node.value : node;
         else
-          return identity2.isCollection(node) ? node.getIn(rest, keepScalar) : void 0;
+          return identity3.isCollection(node) ? node.getIn(rest, keepScalar) : void 0;
       }
       hasAllNullValues(allowScalar) {
         return this.items.every((node) => {
-          if (!identity2.isPair(node))
+          if (!identity3.isPair(node))
             return false;
           const n = node.value;
-          return n == null || allowScalar && identity2.isScalar(n) && n.value == null && !n.commentBefore && !n.comment && !n.tag;
+          return n == null || allowScalar && identity3.isScalar(n) && n.value == null && !n.commentBefore && !n.comment && !n.tag;
         });
       }
       /**
@@ -951,7 +951,7 @@ var require_Collection = __commonJS({
         if (rest.length === 0)
           return this.has(key);
         const node = this.get(key, true);
-        return identity2.isCollection(node) ? node.hasIn(rest) : false;
+        return identity3.isCollection(node) ? node.hasIn(rest) : false;
       }
       /**
        * Sets a value in this collection. For `!!set`, `value` needs to be a
@@ -963,7 +963,7 @@ var require_Collection = __commonJS({
           this.set(key, value);
         } else {
           const node = this.get(key, true);
-          if (identity2.isCollection(node))
+          if (identity3.isCollection(node))
             node.setIn(rest, value);
           else if (node === void 0 && this.schema)
             this.set(key, collectionFromPath(this.schema, rest, value));
@@ -1419,7 +1419,7 @@ var require_stringify = __commonJS({
   "node_modules/yaml/dist/stringify/stringify.js"(exports) {
     "use strict";
     var anchors = require_anchors();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var stringifyComment = require_stringifyComment();
     var stringifyString = require_stringifyString();
     function createStringifyContext(doc, options) {
@@ -1472,7 +1472,7 @@ var require_stringify = __commonJS({
       }
       let tagObj = void 0;
       let obj;
-      if (identity2.isScalar(item)) {
+      if (identity3.isScalar(item)) {
         obj = item.value;
         let match = tags.filter((t) => t.identify?.(obj));
         if (match.length > 1) {
@@ -1495,7 +1495,7 @@ var require_stringify = __commonJS({
       if (!doc.directives)
         return "";
       const props = [];
-      const anchor = (identity2.isScalar(node) || identity2.isCollection(node)) && node.anchor;
+      const anchor = (identity3.isScalar(node) || identity3.isCollection(node)) && node.anchor;
       if (anchor && anchors.anchorIsValid(anchor)) {
         anchors$1.add(anchor);
         props.push(`&${anchor}`);
@@ -1506,9 +1506,9 @@ var require_stringify = __commonJS({
       return props.join(" ");
     }
     function stringify(item, ctx, onComment, onChompKeep) {
-      if (identity2.isPair(item))
+      if (identity3.isPair(item))
         return item.toString(ctx, onComment, onChompKeep);
-      if (identity2.isAlias(item)) {
+      if (identity3.isAlias(item)) {
         if (ctx.doc.directives)
           return item.toString(ctx);
         if (ctx.resolvedAliases?.has(item)) {
@@ -1522,15 +1522,15 @@ var require_stringify = __commonJS({
         }
       }
       let tagObj = void 0;
-      const node = identity2.isNode(item) ? item : ctx.doc.createNode(item, { onTagObj: (o) => tagObj = o });
+      const node = identity3.isNode(item) ? item : ctx.doc.createNode(item, { onTagObj: (o) => tagObj = o });
       tagObj ?? (tagObj = getTagObject(ctx.doc.schema.tags, node));
       const props = stringifyProps(node, tagObj, ctx);
       if (props.length > 0)
         ctx.indentAtStart = (ctx.indentAtStart ?? 0) + props.length + 1;
-      const str = typeof tagObj.stringify === "function" ? tagObj.stringify(node, ctx, onComment, onChompKeep) : identity2.isScalar(node) ? stringifyString.stringifyString(node, ctx, onComment, onChompKeep) : node.toString(ctx, onComment, onChompKeep);
+      const str = typeof tagObj.stringify === "function" ? tagObj.stringify(node, ctx, onComment, onChompKeep) : identity3.isScalar(node) ? stringifyString.stringifyString(node, ctx, onComment, onChompKeep) : node.toString(ctx, onComment, onChompKeep);
       if (!props)
         return str;
-      return identity2.isScalar(node) || str[0] === "{" || str[0] === "[" ? `${props} ${str}` : `${props}
+      return identity3.isScalar(node) || str[0] === "{" || str[0] === "[" ? `${props} ${str}` : `${props}
 ${ctx.indent}${str}`;
     }
     exports.createStringifyContext = createStringifyContext;
@@ -1542,23 +1542,23 @@ ${ctx.indent}${str}`;
 var require_stringifyPair = __commonJS({
   "node_modules/yaml/dist/stringify/stringifyPair.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Scalar = require_Scalar();
     var stringify = require_stringify();
     var stringifyComment = require_stringifyComment();
     function stringifyPair({ key, value }, ctx, onComment, onChompKeep) {
       const { allNullValues, doc, indent, indentStep, options: { commentString, indentSeq, simpleKeys } } = ctx;
-      let keyComment = identity2.isNode(key) && key.comment || null;
+      let keyComment = identity3.isNode(key) && key.comment || null;
       if (simpleKeys) {
         if (keyComment) {
           throw new Error("With simple keys, key nodes cannot have comments");
         }
-        if (identity2.isCollection(key) || !identity2.isNode(key) && typeof key === "object") {
+        if (identity3.isCollection(key) || !identity3.isNode(key) && typeof key === "object") {
           const msg = "With simple keys, collection cannot be used as a key value";
           throw new Error(msg);
         }
       }
-      let explicitKey = !simpleKeys && (!key || keyComment && value == null && !ctx.inFlow || identity2.isCollection(key) || (identity2.isScalar(key) ? key.type === Scalar.Scalar.BLOCK_FOLDED || key.type === Scalar.Scalar.BLOCK_LITERAL : typeof key === "object"));
+      let explicitKey = !simpleKeys && (!key || keyComment && value == null && !ctx.inFlow || identity3.isCollection(key) || (identity3.isScalar(key) ? key.type === Scalar.Scalar.BLOCK_FOLDED || key.type === Scalar.Scalar.BLOCK_LITERAL : typeof key === "object"));
       ctx = Object.assign({}, ctx, {
         allNullValues: false,
         implicitKey: !explicitKey && (simpleKeys || !allNullValues),
@@ -1599,7 +1599,7 @@ ${indent}:`;
           str += stringifyComment.lineComment(str, ctx.indent, commentString(keyComment));
       }
       let vsb, vcb, valueComment;
-      if (identity2.isNode(value)) {
+      if (identity3.isNode(value)) {
         vsb = !!value.spaceBefore;
         vcb = value.commentBefore;
         valueComment = value.comment;
@@ -1611,10 +1611,10 @@ ${indent}:`;
           value = doc.createNode(value);
       }
       ctx.implicitKey = false;
-      if (!explicitKey && !keyComment && identity2.isScalar(value))
+      if (!explicitKey && !keyComment && identity3.isScalar(value))
         ctx.indentAtStart = str.length + 1;
       chompKeep = false;
-      if (!indentSeq && indentStep.length >= 2 && !ctx.inFlow && !explicitKey && identity2.isSeq(value) && !value.flow && !value.tag && !value.anchor) {
+      if (!indentSeq && indentStep.length >= 2 && !ctx.inFlow && !explicitKey && identity3.isSeq(value) && !value.flow && !value.tag && !value.anchor) {
         ctx.indent = ctx.indent.substring(2);
       }
       let valueCommentDone = false;
@@ -1634,7 +1634,7 @@ ${stringifyComment.indentComment(cs, ctx.indent)}`;
           ws += `
 ${ctx.indent}`;
         }
-      } else if (!explicitKey && identity2.isCollection(value)) {
+      } else if (!explicitKey && identity3.isCollection(value)) {
         const vs0 = valueStr[0];
         const nl0 = valueStr.indexOf("\n");
         const hasNewline = nl0 !== -1;
@@ -1697,7 +1697,7 @@ var require_log = __commonJS({
 var require_merge = __commonJS({
   "node_modules/yaml/dist/schema/yaml-1.1/merge.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Scalar = require_Scalar();
     var MERGE_KEY = "<<";
     var merge = {
@@ -1710,10 +1710,10 @@ var require_merge = __commonJS({
       }),
       stringify: () => MERGE_KEY
     };
-    var isMergeKey = (ctx, key) => (merge.identify(key) || identity2.isScalar(key) && (!key.type || key.type === Scalar.Scalar.PLAIN) && merge.identify(key.value)) && ctx?.doc.schema.tags.some((tag) => tag.tag === merge.tag && tag.default);
+    var isMergeKey = (ctx, key) => (merge.identify(key) || identity3.isScalar(key) && (!key.type || key.type === Scalar.Scalar.PLAIN) && merge.identify(key.value)) && ctx?.doc.schema.tags.some((tag) => tag.tag === merge.tag && tag.default);
     function addMergeToJSMap(ctx, map, value) {
       const source = resolveAliasValue(ctx, value);
-      if (identity2.isSeq(source))
+      if (identity3.isSeq(source))
         for (const it of source.items)
           mergeValue(ctx, map, it);
       else if (Array.isArray(source))
@@ -1724,7 +1724,7 @@ var require_merge = __commonJS({
     }
     function mergeValue(ctx, map, value) {
       const source = resolveAliasValue(ctx, value);
-      if (!identity2.isMap(source))
+      if (!identity3.isMap(source))
         throw new Error("Merge sources must be maps or map aliases");
       const srcMap = source.toJSON(null, ctx, Map);
       for (const [key, value2] of srcMap) {
@@ -1745,7 +1745,7 @@ var require_merge = __commonJS({
       return map;
     }
     function resolveAliasValue(ctx, value) {
-      return ctx && identity2.isAlias(value) ? value.resolve(ctx.doc, ctx) : value;
+      return ctx && identity3.isAlias(value) ? value.resolve(ctx.doc, ctx) : value;
     }
     exports.addMergeToJSMap = addMergeToJSMap;
     exports.isMergeKey = isMergeKey;
@@ -1760,10 +1760,10 @@ var require_addPairToJSMap = __commonJS({
     var log = require_log();
     var merge = require_merge();
     var stringify = require_stringify();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var toJS = require_toJS();
     function addPairToJSMap(ctx, map, { key, value }) {
-      if (identity2.isNode(key) && key.addToJSMap)
+      if (identity3.isNode(key) && key.addToJSMap)
         key.addToJSMap(ctx, map, value);
       else if (merge.isMergeKey(ctx, key))
         merge.addMergeToJSMap(ctx, map, value);
@@ -1794,7 +1794,7 @@ var require_addPairToJSMap = __commonJS({
         return "";
       if (typeof jsKey !== "object")
         return String(jsKey);
-      if (identity2.isNode(key) && ctx?.doc) {
+      if (identity3.isNode(key) && ctx?.doc) {
         const strCtx = stringify.createStringifyContext(ctx.doc, {});
         strCtx.anchors = /* @__PURE__ */ new Set();
         for (const node of ctx.anchors.keys())
@@ -1824,7 +1824,7 @@ var require_Pair = __commonJS({
     var createNode = require_createNode();
     var stringifyPair = require_stringifyPair();
     var addPairToJSMap = require_addPairToJSMap();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     function createPair(key, value, ctx) {
       const k = createNode.createNode(key, void 0, ctx);
       const v = createNode.createNode(value, void 0, ctx);
@@ -1832,15 +1832,15 @@ var require_Pair = __commonJS({
     }
     var Pair = class _Pair {
       constructor(key, value = null) {
-        Object.defineProperty(this, identity2.NODE_TYPE, { value: identity2.PAIR });
+        Object.defineProperty(this, identity3.NODE_TYPE, { value: identity3.PAIR });
         this.key = key;
         this.value = value;
       }
       clone(schema) {
         let { key, value } = this;
-        if (identity2.isNode(key))
+        if (identity3.isNode(key))
           key = key.clone(schema);
-        if (identity2.isNode(value))
+        if (identity3.isNode(value))
           value = value.clone(schema);
         return new _Pair(key, value);
       }
@@ -1861,7 +1861,7 @@ var require_Pair = __commonJS({
 var require_stringifyCollection = __commonJS({
   "node_modules/yaml/dist/stringify/stringifyCollection.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var stringify = require_stringify();
     var stringifyComment = require_stringifyComment();
     function stringifyCollection(collection, ctx, options) {
@@ -1877,14 +1877,14 @@ var require_stringifyCollection = __commonJS({
       for (let i = 0; i < items.length; ++i) {
         const item = items[i];
         let comment2 = null;
-        if (identity2.isNode(item)) {
+        if (identity3.isNode(item)) {
           if (!chompKeep && item.spaceBefore)
             lines.push("");
           addCommentBefore(ctx, lines, item.commentBefore, chompKeep);
           if (item.comment)
             comment2 = item.comment;
-        } else if (identity2.isPair(item)) {
-          const ik = identity2.isNode(item.key) ? item.key : null;
+        } else if (identity3.isPair(item)) {
+          const ik = identity3.isNode(item.key) ? item.key : null;
           if (ik) {
             if (!chompKeep && ik.spaceBefore)
               lines.push("");
@@ -1932,14 +1932,14 @@ ${indent}${line}` : "\n";
       for (let i = 0; i < items.length; ++i) {
         const item = items[i];
         let comment = null;
-        if (identity2.isNode(item)) {
+        if (identity3.isNode(item)) {
           if (item.spaceBefore)
             lines.push("");
           addCommentBefore(ctx, lines, item.commentBefore, false);
           if (item.comment)
             comment = item.comment;
-        } else if (identity2.isPair(item)) {
-          const ik = identity2.isNode(item.key) ? item.key : null;
+        } else if (identity3.isPair(item)) {
+          const ik = identity3.isNode(item.key) ? item.key : null;
           if (ik) {
             if (ik.spaceBefore)
               lines.push("");
@@ -1947,7 +1947,7 @@ ${indent}${line}` : "\n";
             if (ik.comment)
               reqNewline = true;
           }
-          const iv = identity2.isNode(item.value) ? item.value : null;
+          const iv = identity3.isNode(item.value) ? item.value : null;
           if (iv) {
             if (iv.comment)
               comment = iv.comment;
@@ -2015,16 +2015,16 @@ var require_YAMLMap = __commonJS({
     var stringifyCollection = require_stringifyCollection();
     var addPairToJSMap = require_addPairToJSMap();
     var Collection = require_Collection();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Pair = require_Pair();
     var Scalar = require_Scalar();
     function findPair(items, key) {
-      const k = identity2.isScalar(key) ? key.value : key;
+      const k = identity3.isScalar(key) ? key.value : key;
       for (const it of items) {
-        if (identity2.isPair(it)) {
+        if (identity3.isPair(it)) {
           if (it.key === key || it.key === k)
             return it;
-          if (identity2.isScalar(it.key) && it.key.value === k)
+          if (identity3.isScalar(it.key) && it.key.value === k)
             return it;
         }
       }
@@ -2035,7 +2035,7 @@ var require_YAMLMap = __commonJS({
         return "tag:yaml.org,2002:map";
       }
       constructor(schema) {
-        super(identity2.MAP, schema);
+        super(identity3.MAP, schema);
         this.items = [];
       }
       /**
@@ -2073,7 +2073,7 @@ var require_YAMLMap = __commonJS({
        */
       add(pair, overwrite) {
         let _pair;
-        if (identity2.isPair(pair))
+        if (identity3.isPair(pair))
           _pair = pair;
         else if (!pair || typeof pair !== "object" || !("key" in pair)) {
           _pair = new Pair.Pair(pair, pair?.value);
@@ -2084,7 +2084,7 @@ var require_YAMLMap = __commonJS({
         if (prev) {
           if (!overwrite)
             throw new Error(`Key ${_pair.key} already set`);
-          if (identity2.isScalar(prev.value) && Scalar.isScalarValue(_pair.value))
+          if (identity3.isScalar(prev.value) && Scalar.isScalarValue(_pair.value))
             prev.value.value = _pair.value;
           else
             prev.value = _pair.value;
@@ -2108,7 +2108,7 @@ var require_YAMLMap = __commonJS({
       get(key, keepScalar) {
         const it = findPair(this.items, key);
         const node = it?.value;
-        return (!keepScalar && identity2.isScalar(node) ? node.value : node) ?? void 0;
+        return (!keepScalar && identity3.isScalar(node) ? node.value : node) ?? void 0;
       }
       has(key) {
         return !!findPair(this.items, key);
@@ -2133,7 +2133,7 @@ var require_YAMLMap = __commonJS({
         if (!ctx)
           return JSON.stringify(this);
         for (const item of this.items) {
-          if (!identity2.isPair(item))
+          if (!identity3.isPair(item))
             throw new Error(`Map items must all be pairs; found ${JSON.stringify(item)} instead`);
         }
         if (!ctx.allNullValues && this.hasAllNullValues(false))
@@ -2156,7 +2156,7 @@ var require_YAMLMap = __commonJS({
 var require_map = __commonJS({
   "node_modules/yaml/dist/schema/common/map.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var YAMLMap = require_YAMLMap();
     var map = {
       collection: "map",
@@ -2164,7 +2164,7 @@ var require_map = __commonJS({
       nodeClass: YAMLMap.YAMLMap,
       tag: "tag:yaml.org,2002:map",
       resolve(map2, onError) {
-        if (!identity2.isMap(map2))
+        if (!identity3.isMap(map2))
           onError("Expected a mapping for this tag");
         return map2;
       },
@@ -2181,7 +2181,7 @@ var require_YAMLSeq = __commonJS({
     var createNode = require_createNode();
     var stringifyCollection = require_stringifyCollection();
     var Collection = require_Collection();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Scalar = require_Scalar();
     var toJS = require_toJS();
     var YAMLSeq = class extends Collection.Collection {
@@ -2189,7 +2189,7 @@ var require_YAMLSeq = __commonJS({
         return "tag:yaml.org,2002:seq";
       }
       constructor(schema) {
-        super(identity2.SEQ, schema);
+        super(identity3.SEQ, schema);
         this.items = [];
       }
       add(value) {
@@ -2215,7 +2215,7 @@ var require_YAMLSeq = __commonJS({
         if (typeof idx !== "number")
           return void 0;
         const it = this.items[idx];
-        return !keepScalar && identity2.isScalar(it) ? it.value : it;
+        return !keepScalar && identity3.isScalar(it) ? it.value : it;
       }
       /**
        * Checks if the collection includes a value with the key `key`.
@@ -2239,7 +2239,7 @@ var require_YAMLSeq = __commonJS({
         if (typeof idx !== "number")
           throw new Error(`Expected a valid index, not ${key}.`);
         const prev = this.items[idx];
-        if (identity2.isScalar(prev) && Scalar.isScalarValue(value))
+        if (identity3.isScalar(prev) && Scalar.isScalarValue(value))
           prev.value = value;
         else
           this.items[idx] = value;
@@ -2281,7 +2281,7 @@ var require_YAMLSeq = __commonJS({
       }
     };
     function asItemIndex(key) {
-      let idx = identity2.isScalar(key) ? key.value : key;
+      let idx = identity3.isScalar(key) ? key.value : key;
       if (idx && typeof idx === "string")
         idx = Number(idx);
       return typeof idx === "number" && Number.isInteger(idx) && idx >= 0 ? idx : null;
@@ -2294,7 +2294,7 @@ var require_YAMLSeq = __commonJS({
 var require_seq = __commonJS({
   "node_modules/yaml/dist/schema/common/seq.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var YAMLSeq = require_YAMLSeq();
     var seq = {
       collection: "seq",
@@ -2302,7 +2302,7 @@ var require_seq = __commonJS({
       nodeClass: YAMLSeq.YAMLSeq,
       tag: "tag:yaml.org,2002:seq",
       resolve(seq2, onError) {
-        if (!identity2.isSeq(seq2))
+        if (!identity3.isSeq(seq2))
           onError("Expected a sequence for this tag");
         return seq2;
       },
@@ -2656,17 +2656,17 @@ var require_binary = __commonJS({
 var require_pairs = __commonJS({
   "node_modules/yaml/dist/schema/yaml-1.1/pairs.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Pair = require_Pair();
     var Scalar = require_Scalar();
     var YAMLSeq = require_YAMLSeq();
     function resolvePairs(seq, onError) {
-      if (identity2.isSeq(seq)) {
+      if (identity3.isSeq(seq)) {
         for (let i = 0; i < seq.items.length; ++i) {
           let item = seq.items[i];
-          if (identity2.isPair(item))
+          if (identity3.isPair(item))
             continue;
-          else if (identity2.isMap(item)) {
+          else if (identity3.isMap(item)) {
             if (item.items.length > 1)
               onError("Each pair must have its own sequence indicator");
             const pair = item.items[0] || new Pair.Pair(new Scalar.Scalar(null));
@@ -2680,7 +2680,7 @@ ${cn.comment}` : item.comment;
             }
             item = pair;
           }
-          seq.items[i] = identity2.isPair(item) ? item : new Pair.Pair(item);
+          seq.items[i] = identity3.isPair(item) ? item : new Pair.Pair(item);
         }
       } else
         onError("Expected a sequence for this tag");
@@ -2734,7 +2734,7 @@ ${cn.comment}` : item.comment;
 var require_omap = __commonJS({
   "node_modules/yaml/dist/schema/yaml-1.1/omap.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var toJS = require_toJS();
     var YAMLMap = require_YAMLMap();
     var YAMLSeq = require_YAMLSeq();
@@ -2761,7 +2761,7 @@ var require_omap = __commonJS({
           ctx.onCreate(map);
         for (const pair of this.items) {
           let key, value;
-          if (identity2.isPair(pair)) {
+          if (identity3.isPair(pair)) {
             key = toJS.toJS(pair.key, "", ctx);
             value = toJS.toJS(pair.value, key, ctx);
           } else {
@@ -2791,7 +2791,7 @@ var require_omap = __commonJS({
         const pairs$1 = pairs.resolvePairs(seq, onError);
         const seenKeys = [];
         for (const { key } of pairs$1.items) {
-          if (identity2.isScalar(key)) {
+          if (identity3.isScalar(key)) {
             if (seenKeys.includes(key.value)) {
               onError(`Ordered maps must not include duplicate keys: ${key.value}`);
             } else {
@@ -2972,7 +2972,7 @@ var require_int2 = __commonJS({
 var require_set = __commonJS({
   "node_modules/yaml/dist/schema/yaml-1.1/set.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Pair = require_Pair();
     var YAMLMap = require_YAMLMap();
     var YAMLSet = class _YAMLSet extends YAMLMap.YAMLMap {
@@ -2982,7 +2982,7 @@ var require_set = __commonJS({
       }
       add(key) {
         let pair;
-        if (identity2.isPair(key))
+        if (identity3.isPair(key))
           pair = key;
         else if (key && typeof key === "object" && "key" in key && "value" in key && key.value === null)
           pair = new Pair.Pair(key.key, null);
@@ -2998,7 +2998,7 @@ var require_set = __commonJS({
        */
       get(key, keepPair) {
         const pair = YAMLMap.findPair(this.items, key);
-        return !keepPair && identity2.isPair(pair) ? identity2.isScalar(pair.key) ? pair.key.value : pair.key : pair;
+        return !keepPair && identity3.isPair(pair) ? identity3.isScalar(pair.key) ? pair.key.value : pair.key : pair;
       }
       set(key, value) {
         if (typeof value !== "boolean")
@@ -3042,7 +3042,7 @@ var require_set = __commonJS({
       tag: "tag:yaml.org,2002:set",
       createNode: (schema, iterable, ctx) => YAMLSet.from(schema, iterable, ctx),
       resolve(map, onError) {
-        if (identity2.isMap(map)) {
+        if (identity3.isMap(map)) {
           if (map.hasAllNullValues(true))
             return Object.assign(new YAMLSet(), map);
           else
@@ -3287,7 +3287,7 @@ var require_tags = __commonJS({
 var require_Schema = __commonJS({
   "node_modules/yaml/dist/schema/Schema.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var map = require_map();
     var seq = require_seq();
     var string = require_string();
@@ -3300,9 +3300,9 @@ var require_Schema = __commonJS({
         this.knownTags = resolveKnownTags ? tags.coreKnownTags : {};
         this.tags = tags.getTags(customTags, this.name, merge);
         this.toStringOptions = toStringDefaults ?? null;
-        Object.defineProperty(this, identity2.MAP, { value: map.map });
-        Object.defineProperty(this, identity2.SCALAR, { value: string.string });
-        Object.defineProperty(this, identity2.SEQ, { value: seq.seq });
+        Object.defineProperty(this, identity3.MAP, { value: map.map });
+        Object.defineProperty(this, identity3.SCALAR, { value: string.string });
+        Object.defineProperty(this, identity3.SEQ, { value: seq.seq });
         this.sortMapEntries = typeof sortMapEntries === "function" ? sortMapEntries : sortMapEntries === true ? sortMapEntriesByKey : null;
       }
       clone() {
@@ -3319,7 +3319,7 @@ var require_Schema = __commonJS({
 var require_stringifyDocument = __commonJS({
   "node_modules/yaml/dist/stringify/stringifyDocument.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var stringify = require_stringify();
     var stringifyComment = require_stringifyComment();
     function stringifyDocument(doc, options) {
@@ -3346,7 +3346,7 @@ var require_stringifyDocument = __commonJS({
       let chompKeep = false;
       let contentComment = null;
       if (doc.contents) {
-        if (identity2.isNode(doc.contents)) {
+        if (identity3.isNode(doc.contents)) {
           if (doc.contents.spaceBefore && hasDirectives)
             lines.push("");
           if (doc.contents.commentBefore) {
@@ -3401,7 +3401,7 @@ var require_Document = __commonJS({
     "use strict";
     var Alias = require_Alias();
     var Collection = require_Collection();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Pair = require_Pair();
     var toJS = require_toJS();
     var Schema = require_Schema();
@@ -3416,7 +3416,7 @@ var require_Document = __commonJS({
         this.comment = null;
         this.errors = [];
         this.warnings = [];
-        Object.defineProperty(this, identity2.NODE_TYPE, { value: identity2.DOC });
+        Object.defineProperty(this, identity3.NODE_TYPE, { value: identity3.DOC });
         let _replacer = null;
         if (typeof replacer === "function" || Array.isArray(replacer)) {
           _replacer = replacer;
@@ -3452,7 +3452,7 @@ var require_Document = __commonJS({
        */
       clone() {
         const copy = Object.create(_Document.prototype, {
-          [identity2.NODE_TYPE]: { value: identity2.DOC }
+          [identity3.NODE_TYPE]: { value: identity3.DOC }
         });
         copy.commentBefore = this.commentBefore;
         copy.comment = this.comment;
@@ -3462,7 +3462,7 @@ var require_Document = __commonJS({
         if (this.directives)
           copy.directives = this.directives.clone();
         copy.schema = this.schema.clone();
-        copy.contents = identity2.isNode(this.contents) ? this.contents.clone(copy.schema) : this.contents;
+        copy.contents = identity3.isNode(this.contents) ? this.contents.clone(copy.schema) : this.contents;
         if (this.range)
           copy.range = this.range.slice();
         return copy;
@@ -3525,7 +3525,7 @@ var require_Document = __commonJS({
           sourceObjects
         };
         const node = createNode.createNode(value, tag, ctx);
-        if (flow && identity2.isCollection(node))
+        if (flow && identity3.isCollection(node))
           node.flow = true;
         setAnchors();
         return node;
@@ -3565,7 +3565,7 @@ var require_Document = __commonJS({
        * `true` (collections are always returned intact).
        */
       get(key, keepScalar) {
-        return identity2.isCollection(this.contents) ? this.contents.get(key, keepScalar) : void 0;
+        return identity3.isCollection(this.contents) ? this.contents.get(key, keepScalar) : void 0;
       }
       /**
        * Returns item at `path`, or `undefined` if not found. By default unwraps
@@ -3574,14 +3574,14 @@ var require_Document = __commonJS({
        */
       getIn(path, keepScalar) {
         if (Collection.isEmptyPath(path))
-          return !keepScalar && identity2.isScalar(this.contents) ? this.contents.value : this.contents;
-        return identity2.isCollection(this.contents) ? this.contents.getIn(path, keepScalar) : void 0;
+          return !keepScalar && identity3.isScalar(this.contents) ? this.contents.value : this.contents;
+        return identity3.isCollection(this.contents) ? this.contents.getIn(path, keepScalar) : void 0;
       }
       /**
        * Checks if the document includes a value with the key `key`.
        */
       has(key) {
-        return identity2.isCollection(this.contents) ? this.contents.has(key) : false;
+        return identity3.isCollection(this.contents) ? this.contents.has(key) : false;
       }
       /**
        * Checks if the document includes a value at `path`.
@@ -3589,7 +3589,7 @@ var require_Document = __commonJS({
       hasIn(path) {
         if (Collection.isEmptyPath(path))
           return this.contents !== void 0;
-        return identity2.isCollection(this.contents) ? this.contents.hasIn(path) : false;
+        return identity3.isCollection(this.contents) ? this.contents.hasIn(path) : false;
       }
       /**
        * Sets a value in this document. For `!!set`, `value` needs to be a
@@ -3696,7 +3696,7 @@ var require_Document = __commonJS({
       }
     };
     function assertCollection(contents) {
-      if (identity2.isCollection(contents))
+      if (identity3.isCollection(contents))
         return true;
       throw new Error("Expected a YAML collection as document contents");
     }
@@ -3967,12 +3967,12 @@ var require_util_flow_indent_check = __commonJS({
 var require_util_map_includes = __commonJS({
   "node_modules/yaml/dist/compose/util-map-includes.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     function mapIncludes(ctx, items, search) {
       const { uniqueKeys } = ctx.options;
       if (uniqueKeys === false)
         return false;
-      const isEqual = typeof uniqueKeys === "function" ? uniqueKeys : (a, b) => a === b || identity2.isScalar(a) && identity2.isScalar(b) && a.value === b.value;
+      const isEqual = typeof uniqueKeys === "function" ? uniqueKeys : (a, b) => a === b || identity3.isScalar(a) && identity3.isScalar(b) && a.value === b.value;
       return items.some((pair) => isEqual(pair.key, search));
     }
     exports.mapIncludes = mapIncludes;
@@ -4185,7 +4185,7 @@ var require_resolve_end = __commonJS({
 var require_resolve_flow_collection = __commonJS({
   "node_modules/yaml/dist/compose/resolve-flow-collection.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Pair = require_Pair();
     var YAMLMap = require_YAMLMap();
     var YAMLSeq = require_YAMLSeq();
@@ -4264,7 +4264,7 @@ var require_resolve_flow_collection = __commonJS({
             }
             if (prevItemComment) {
               let prev = coll.items[coll.items.length - 1];
-              if (identity2.isPair(prev))
+              if (identity3.isPair(prev))
                 prev = prev.value ?? prev.key;
               if (prev.comment)
                 prev.comment += "\n" + prevItemComment;
@@ -4379,7 +4379,7 @@ var require_resolve_flow_collection = __commonJS({
 var require_compose_collection = __commonJS({
   "node_modules/yaml/dist/compose/compose-collection.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Scalar = require_Scalar();
     var YAMLMap = require_YAMLMap();
     var YAMLSeq = require_YAMLSeq();
@@ -4429,7 +4429,7 @@ var require_compose_collection = __commonJS({
       }
       const coll = resolveCollection(CN, ctx, token, onError, tagName, tag);
       const res = tag.resolve?.(coll, (msg) => onError(tagToken, "TAG_RESOLVE_FAILED", msg), ctx.options) ?? coll;
-      const node = identity2.isNode(res) ? res : new Scalar.Scalar(res);
+      const node = identity3.isNode(res) ? res : new Scalar.Scalar(res);
       node.range = coll.range;
       node.tag = tagName;
       if (tag?.format)
@@ -4848,7 +4848,7 @@ var require_resolve_flow_scalar = __commonJS({
 var require_compose_scalar = __commonJS({
   "node_modules/yaml/dist/compose/compose-scalar.js"(exports) {
     "use strict";
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Scalar = require_Scalar();
     var resolveBlockScalar = require_resolve_block_scalar();
     var resolveFlowScalar = require_resolve_flow_scalar();
@@ -4857,17 +4857,17 @@ var require_compose_scalar = __commonJS({
       const tagName = tagToken ? ctx.directives.tagName(tagToken.source, (msg) => onError(tagToken, "TAG_RESOLVE_FAILED", msg)) : null;
       let tag;
       if (ctx.options.stringKeys && ctx.atKey) {
-        tag = ctx.schema[identity2.SCALAR];
+        tag = ctx.schema[identity3.SCALAR];
       } else if (tagName)
         tag = findScalarTagByName(ctx.schema, value, tagName, tagToken, onError);
       else if (token.type === "scalar")
         tag = findScalarTagByTest(ctx, value, token, onError);
       else
-        tag = ctx.schema[identity2.SCALAR];
+        tag = ctx.schema[identity3.SCALAR];
       let scalar;
       try {
         const res = tag.resolve(value, (msg) => onError(tagToken ?? token, "TAG_RESOLVE_FAILED", msg), ctx.options);
-        scalar = identity2.isScalar(res) ? res : new Scalar.Scalar(res);
+        scalar = identity3.isScalar(res) ? res : new Scalar.Scalar(res);
       } catch (error2) {
         const msg = error2 instanceof Error ? error2.message : String(error2);
         onError(tagToken ?? token, "TAG_RESOLVE_FAILED", msg);
@@ -4887,7 +4887,7 @@ var require_compose_scalar = __commonJS({
     }
     function findScalarTagByName(schema, value, tagName, tagToken, onError) {
       if (tagName === "!")
-        return schema[identity2.SCALAR];
+        return schema[identity3.SCALAR];
       const matchWithTest = [];
       for (const tag of schema.tags) {
         if (!tag.collection && tag.tag === tagName) {
@@ -4906,12 +4906,12 @@ var require_compose_scalar = __commonJS({
         return kt;
       }
       onError(tagToken, "TAG_RESOLVE_FAILED", `Unresolved tag: ${tagName}`, tagName !== "tag:yaml.org,2002:str");
-      return schema[identity2.SCALAR];
+      return schema[identity3.SCALAR];
     }
     function findScalarTagByTest({ atKey, directives, schema }, value, token, onError) {
-      const tag = schema.tags.find((tag2) => (tag2.default === true || atKey && tag2.default === "key") && tag2.test?.test(value)) || schema[identity2.SCALAR];
+      const tag = schema.tags.find((tag2) => (tag2.default === true || atKey && tag2.default === "key") && tag2.test?.test(value)) || schema[identity3.SCALAR];
       if (schema.compat) {
-        const compat = schema.compat.find((tag2) => tag2.default && tag2.test?.test(value)) ?? schema[identity2.SCALAR];
+        const compat = schema.compat.find((tag2) => tag2.default && tag2.test?.test(value)) ?? schema[identity3.SCALAR];
         if (tag.tag !== compat.tag) {
           const ts = directives.tagString(tag.tag);
           const cs = directives.tagString(compat.tag);
@@ -4960,7 +4960,7 @@ var require_compose_node = __commonJS({
   "node_modules/yaml/dist/compose/compose-node.js"(exports) {
     "use strict";
     var Alias = require_Alias();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var composeCollection = require_compose_collection();
     var composeScalar = require_compose_scalar();
     var resolveEnd = require_resolve_end();
@@ -5006,7 +5006,7 @@ var require_compose_node = __commonJS({
       node ?? (node = composeEmptyNode(ctx, token.offset, void 0, null, props, onError));
       if (anchor && node.anchor === "")
         onError(anchor, "BAD_ALIAS", "Anchor cannot be an empty string");
-      if (atKey && ctx.options.stringKeys && (!identity2.isScalar(node) || typeof node.value !== "string" || node.tag && node.tag !== "tag:yaml.org,2002:str")) {
+      if (atKey && ctx.options.stringKeys && (!identity3.isScalar(node) || typeof node.value !== "string" || node.tag && node.tag !== "tag:yaml.org,2002:str")) {
         const msg = "With stringKeys, all keys must be strings";
         onError(tag ?? token, "NON_STRING_KEY", msg);
       }
@@ -5112,7 +5112,7 @@ var require_composer = __commonJS({
     var directives = require_directives();
     var Document = require_Document();
     var errors = require_errors();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var composeDoc = require_compose_doc();
     var resolveEnd = require_resolve_end();
     function getErrorPos(src) {
@@ -5174,9 +5174,9 @@ var require_composer = __commonJS({
 ${comment}` : comment;
           } else if (afterEmptyLine || doc.directives.docStart || !dc) {
             doc.commentBefore = comment;
-          } else if (identity2.isCollection(dc) && !dc.flow && dc.items.length > 0) {
+          } else if (identity3.isCollection(dc) && !dc.flow && dc.items.length > 0) {
             let it = dc.items[0];
-            if (identity2.isPair(it))
+            if (identity3.isPair(it))
               it = it.key;
             const cb = it.commentBefore;
             it.commentBefore = cb ? `${comment}
@@ -7224,7 +7224,7 @@ var require_public_api = __commonJS({
     var Document = require_Document();
     var errors = require_errors();
     var log = require_log();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var lineCounter = require_line_counter();
     var parser = require_parser();
     function parseOptions(options) {
@@ -7302,7 +7302,7 @@ var require_public_api = __commonJS({
         if (!keepUndefined)
           return void 0;
       }
-      if (identity2.isDocument(value) && !_replacer)
+      if (identity3.isDocument(value) && !_replacer)
         return value.toString(options);
       return new Document.Document(value, _replacer, options).toString(options);
     }
@@ -7322,7 +7322,7 @@ var require_dist = __commonJS({
     var Schema = require_Schema();
     var errors = require_errors();
     var Alias = require_Alias();
-    var identity2 = require_identity();
+    var identity3 = require_identity();
     var Pair = require_Pair();
     var Scalar = require_Scalar();
     var YAMLMap = require_YAMLMap();
@@ -7340,14 +7340,14 @@ var require_dist = __commonJS({
     exports.YAMLParseError = errors.YAMLParseError;
     exports.YAMLWarning = errors.YAMLWarning;
     exports.Alias = Alias.Alias;
-    exports.isAlias = identity2.isAlias;
-    exports.isCollection = identity2.isCollection;
-    exports.isDocument = identity2.isDocument;
-    exports.isMap = identity2.isMap;
-    exports.isNode = identity2.isNode;
-    exports.isPair = identity2.isPair;
-    exports.isScalar = identity2.isScalar;
-    exports.isSeq = identity2.isSeq;
+    exports.isAlias = identity3.isAlias;
+    exports.isCollection = identity3.isCollection;
+    exports.isDocument = identity3.isDocument;
+    exports.isMap = identity3.isMap;
+    exports.isNode = identity3.isNode;
+    exports.isPair = identity3.isPair;
+    exports.isScalar = identity3.isScalar;
+    exports.isSeq = identity3.isSeq;
     exports.Pair = Pair.Pair;
     exports.Scalar = Scalar.Scalar;
     exports.YAMLMap = YAMLMap.YAMLMap;
@@ -9134,10 +9134,10 @@ var require_request = __commonJS({
           channels.create.publish({ request: this });
         }
       }
-      onBodySent(chunk) {
+      onBodySent(chunk2) {
         if (this[kHandler].onBodySent) {
           try {
-            return this[kHandler].onBodySent(chunk);
+            return this[kHandler].onBodySent(chunk2);
           } catch (err) {
             this.abort(err);
           }
@@ -9180,11 +9180,11 @@ var require_request = __commonJS({
           this.abort(err);
         }
       }
-      onData(chunk) {
+      onData(chunk2) {
         assert(!this.aborted);
         assert(!this.completed);
         try {
-          return this[kHandler].onData(chunk);
+          return this[kHandler].onData(chunk2);
         } catch (err) {
           this.abort(err);
           return false;
@@ -11512,10 +11512,10 @@ var require_util2 = __commonJS({
     function TAOCheck() {
       return "success";
     }
-    function appendFetchMetadata(httpRequest) {
+    function appendFetchMetadata(httpRequest2) {
       let header = null;
-      header = httpRequest.mode;
-      httpRequest.headersList.set("sec-fetch-mode", header, true);
+      header = httpRequest2.mode;
+      httpRequest2.headersList.set("sec-fetch-mode", header, true);
     }
     function appendRequestOriginHeader(request) {
       let serializedOrigin = request.origin;
@@ -11990,15 +11990,15 @@ var require_util2 = __commonJS({
       const bytes = [];
       let byteLength = 0;
       while (true) {
-        const { done, value: chunk } = await reader.read();
+        const { done, value: chunk2 } = await reader.read();
         if (done) {
           return Buffer.concat(bytes, byteLength);
         }
-        if (!isUint8Array(chunk)) {
+        if (!isUint8Array(chunk2)) {
           throw new TypeError("Received non-Uint8Array chunk");
         }
-        bytes.push(chunk);
-        byteLength += chunk.length;
+        bytes.push(chunk2);
+        byteLength += chunk2.length;
       }
     }
     function urlIsLocal(url) {
@@ -12101,18 +12101,18 @@ var require_util2 = __commonJS({
         super();
         this.#zlibOptions = zlibOptions;
       }
-      _transform(chunk, encoding, callback) {
+      _transform(chunk2, encoding, callback) {
         if (!this._inflateStream) {
-          if (chunk.length === 0) {
+          if (chunk2.length === 0) {
             callback();
             return;
           }
-          this._inflateStream = (chunk[0] & 15) === 8 ? zlib.createInflate(this.#zlibOptions) : zlib.createInflateRaw(this.#zlibOptions);
+          this._inflateStream = (chunk2[0] & 15) === 8 ? zlib.createInflate(this.#zlibOptions) : zlib.createInflateRaw(this.#zlibOptions);
           this._inflateStream.on("data", this.push.bind(this));
           this._inflateStream.on("end", () => this.push(null));
           this._inflateStream.on("error", (err) => this.destroy(err));
         }
-        this._inflateStream.write(chunk, encoding, callback);
+        this._inflateStream.write(chunk2, encoding, callback);
       }
       _final(callback) {
         if (this._inflateStream) {
@@ -12838,29 +12838,29 @@ Content-Disposition: form-data`;
         let hasUnknownSizeValue = false;
         for (const [name, value] of object) {
           if (typeof value === "string") {
-            const chunk2 = textEncoder.encode(prefix + `; name="${escape(normalizeLinefeeds(name))}"\r
+            const chunk3 = textEncoder.encode(prefix + `; name="${escape(normalizeLinefeeds(name))}"\r
 \r
 ${normalizeLinefeeds(value)}\r
 `);
-            blobParts.push(chunk2);
-            length += chunk2.byteLength;
+            blobParts.push(chunk3);
+            length += chunk3.byteLength;
           } else {
-            const chunk2 = textEncoder.encode(`${prefix}; name="${escape(normalizeLinefeeds(name))}"` + (value.name ? `; filename="${escape(value.name)}"` : "") + `\r
+            const chunk3 = textEncoder.encode(`${prefix}; name="${escape(normalizeLinefeeds(name))}"` + (value.name ? `; filename="${escape(value.name)}"` : "") + `\r
 Content-Type: ${value.type || "application/octet-stream"}\r
 \r
 `);
-            blobParts.push(chunk2, value, rn);
+            blobParts.push(chunk3, value, rn);
             if (typeof value.size === "number") {
-              length += chunk2.byteLength + value.size + rn.byteLength;
+              length += chunk3.byteLength + value.size + rn.byteLength;
             } else {
               hasUnknownSizeValue = true;
             }
           }
         }
-        const chunk = textEncoder.encode(`--${boundary}--\r
+        const chunk2 = textEncoder.encode(`--${boundary}--\r
 `);
-        blobParts.push(chunk);
-        length += chunk.byteLength;
+        blobParts.push(chunk2);
+        length += chunk2.byteLength;
         if (hasUnknownSizeValue) {
           length = null;
         }
@@ -13252,11 +13252,11 @@ var require_client_h1 = __commonJS({
       }
       readMore() {
         while (!this.paused && this.ptr) {
-          const chunk = this.socket.read();
-          if (chunk === null) {
+          const chunk2 = this.socket.read();
+          if (chunk2 === null) {
             break;
           }
-          this.execute(chunk);
+          this.execute(chunk2);
         }
       }
       execute(data) {
@@ -13925,12 +13925,12 @@ upgrade: ${upgrade}\r
       assert(contentLength !== 0 || client[kRunning] === 0, "stream body cannot be pipelined");
       let finished = false;
       const writer = new AsyncWriter({ abort, socket, request, contentLength, client, expectsPayload, header });
-      const onData = function(chunk) {
+      const onData = function(chunk2) {
         if (finished) {
           return;
         }
         try {
-          if (!writer.write(chunk) && this.pause) {
+          if (!writer.write(chunk2) && this.pause) {
             this.pause();
           }
         } catch (err) {
@@ -14065,11 +14065,11 @@ upgrade: ${upgrade}\r
       socket.on("close", onDrain).on("drain", onDrain);
       const writer = new AsyncWriter({ abort, socket, request, contentLength, client, expectsPayload, header });
       try {
-        for await (const chunk of body) {
+        for await (const chunk2 of body) {
           if (socket[kError]) {
             throw socket[kError];
           }
-          if (!writer.write(chunk)) {
+          if (!writer.write(chunk2)) {
             await waitForDrain();
           }
         }
@@ -14092,7 +14092,7 @@ upgrade: ${upgrade}\r
         this.abort = abort;
         socket[kWriting] = true;
       }
-      write(chunk) {
+      write(chunk2) {
         const { socket, request, contentLength, client, bytesWritten, expectsPayload, header } = this;
         if (socket[kError]) {
           throw socket[kError];
@@ -14100,7 +14100,7 @@ upgrade: ${upgrade}\r
         if (socket.destroyed) {
           return false;
         }
-        const len = Buffer.byteLength(chunk);
+        const len = Buffer.byteLength(chunk2);
         if (!len) {
           return true;
         }
@@ -14130,9 +14130,9 @@ ${len.toString(16)}\r
 `, "latin1");
         }
         this.bytesWritten += len;
-        const ret = socket.write(chunk);
+        const ret = socket.write(chunk2);
         socket.uncork();
-        request.onBodySent(chunk);
+        request.onBodySent(chunk2);
         if (!ret) {
           if (socket[kParser].timeout && socket[kParser].timeoutType === TIMEOUT_HEADERS) {
             if (socket[kParser].timeout.refresh) {
@@ -14550,8 +14550,8 @@ var require_client_h2 = __commonJS({
         if (request.onHeaders(Number(statusCode), parseH2Headers(realHeaders), stream.resume.bind(stream), "") === false) {
           stream.pause();
         }
-        stream.on("data", (chunk) => {
-          if (request.onData(chunk) === false) {
+        stream.on("data", (chunk2) => {
+          if (request.onData(chunk2) === false) {
             stream.pause();
           }
         });
@@ -14694,8 +14694,8 @@ var require_client_h2 = __commonJS({
         }
       );
       util.addListener(pipe, "data", onPipeData);
-      function onPipeData(chunk) {
-        request.onBodySent(chunk);
+      function onPipeData(chunk2) {
+        request.onBodySent(chunk2);
       }
     }
     async function writeBlob(abort, h2stream, body, client, request, socket, contentLength, expectsPayload) {
@@ -14739,12 +14739,12 @@ var require_client_h2 = __commonJS({
       });
       h2stream.on("close", onDrain).on("drain", onDrain);
       try {
-        for await (const chunk of body) {
+        for await (const chunk2 of body) {
           if (socket[kError]) {
             throw socket[kError];
           }
-          const res = h2stream.write(chunk);
-          request.onBodySent(chunk);
+          const res = h2stream.write(chunk2);
+          request.onBodySent(chunk2);
           if (!res) {
             await waitForDrain();
           }
@@ -14857,10 +14857,10 @@ var require_redirect_handler = __commonJS({
           this.opts.body = null;
         }
       }
-      onData(chunk) {
+      onData(chunk2) {
         if (this.location) {
         } else {
-          return this.handler.onData(chunk);
+          return this.handler.onData(chunk2);
         }
       }
       onComplete(trailers) {
@@ -14872,9 +14872,9 @@ var require_redirect_handler = __commonJS({
           this.handler.onComplete(trailers);
         }
       }
-      onBodySent(chunk) {
+      onBodySent(chunk2) {
         if (this.handler.onBodySent) {
-          this.handler.onBodySent(chunk);
+          this.handler.onBodySent(chunk2);
         }
       }
     };
@@ -16512,8 +16512,8 @@ var require_retry_handler = __commonJS({
           this.abort = abort;
         }
       }
-      onBodySent(chunk) {
-        if (this.handler.onBodySent) return this.handler.onBodySent(chunk);
+      onBodySent(chunk2) {
+        if (this.handler.onBodySent) return this.handler.onBodySent(chunk2);
       }
       static [kRetryHandlerDefaultRetry](err, { state, opts }, cb) {
         const { statusCode, code, headers } = err;
@@ -16680,9 +16680,9 @@ var require_retry_handler = __commonJS({
         this.abort(err);
         return false;
       }
-      onData(chunk) {
-        this.start += chunk.length;
-        return this.handler.onData(chunk);
+      onData(chunk2) {
+        this.start += chunk2.length;
+        return this.handler.onData(chunk2);
       }
       onComplete(rawTrailers) {
         this.retryCount = 0;
@@ -16846,12 +16846,12 @@ var require_readable = __commonJS({
       removeListener(ev, ...args) {
         return this.off(ev, ...args);
       }
-      push(chunk) {
-        if (this[kConsume] && chunk !== null) {
-          consumePush(this[kConsume], chunk);
-          return this[kReading] ? super.push(chunk) : true;
+      push(chunk2) {
+        if (this[kConsume] && chunk2 !== null) {
+          consumePush(this[kConsume], chunk2);
+          return this[kReading] ? super.push(chunk2) : true;
         }
-        return super.push(chunk);
+        return super.push(chunk2);
       }
       // https://fetch.spec.whatwg.org/#dom-body-text
       async text() {
@@ -16917,8 +16917,8 @@ var require_readable = __commonJS({
             } else {
               resolve2(null);
             }
-          }).on("error", noop).on("data", function(chunk) {
-            limit -= chunk.length;
+          }).on("error", noop).on("data", function(chunk2) {
+            limit -= chunk2.length;
             if (limit <= 0) {
               this.destroy();
             }
@@ -16980,8 +16980,8 @@ var require_readable = __commonJS({
           consumePush(consume2, state.buffer[n]);
         }
       } else {
-        for (const chunk of state.buffer) {
-          consumePush(consume2, chunk);
+        for (const chunk2 of state.buffer) {
+          consumePush(consume2, chunk2);
         }
       }
       if (state.endEmitted) {
@@ -17014,9 +17014,9 @@ var require_readable = __commonJS({
       const buffer = new Uint8Array(Buffer.allocUnsafeSlow(length).buffer);
       let offset = 0;
       for (let i = 0; i < chunks.length; ++i) {
-        const chunk = chunks[i];
-        buffer.set(chunk, offset);
-        offset += chunk.length;
+        const chunk2 = chunks[i];
+        buffer.set(chunk2, offset);
+        offset += chunk2.length;
       }
       return buffer;
     }
@@ -17039,9 +17039,9 @@ var require_readable = __commonJS({
         stream.destroy(err);
       }
     }
-    function consumePush(consume2, chunk) {
-      consume2.length += chunk.length;
-      consume2.body.push(chunk);
+    function consumePush(consume2, chunk2) {
+      consume2.length += chunk2.length;
+      consume2.body.push(chunk2);
     }
     function consumeFinish(consume2, err) {
       if (consume2.body === null) {
@@ -17077,9 +17077,9 @@ var require_util3 = __commonJS({
       let chunks = [];
       let length = 0;
       try {
-        for await (const chunk of body) {
-          chunks.push(chunk);
-          length += chunk.length;
+        for await (const chunk2 of body) {
+          chunks.push(chunk2);
+          length += chunk2.length;
           if (length > CHUNK_LIMIT) {
             chunks = [];
             length = 0;
@@ -17255,8 +17255,8 @@ var require_api_request = __commonJS({
           }
         }
       }
-      onData(chunk) {
-        return this.res.push(chunk);
+      onData(chunk2) {
+        return this.res.push(chunk2);
       }
       onComplete(trailers) {
         util.parseHeaders(trailers, this.trailers);
@@ -17480,9 +17480,9 @@ var require_api_stream = __commonJS({
         const needDrain = res.writableNeedDrain !== void 0 ? res.writableNeedDrain : res._writableState?.needDrain;
         return needDrain !== true;
       }
-      onData(chunk) {
+      onData(chunk2) {
         const { res } = this;
-        return res ? res.write(chunk) : true;
+        return res ? res.write(chunk2) : true;
       }
       onComplete(trailers) {
         const { res } = this;
@@ -17620,9 +17620,9 @@ var require_api_pipeline = __commonJS({
               body.resume();
             }
           },
-          write: (chunk, encoding, callback) => {
+          write: (chunk2, encoding, callback) => {
             const { req } = this;
-            if (req.push(chunk, encoding) || req._readableState.destroyed) {
+            if (req.push(chunk2, encoding) || req._readableState.destroyed) {
               callback();
             } else {
               req[kResume] = callback;
@@ -17688,9 +17688,9 @@ var require_api_pipeline = __commonJS({
         if (!body || typeof body.on !== "function") {
           throw new InvalidReturnValueError("expected Readable");
         }
-        body.on("data", (chunk) => {
+        body.on("data", (chunk2) => {
           const { ret, body: body2 } = this;
-          if (!ret.push(chunk) && body2.pause) {
+          if (!ret.push(chunk2) && body2.pause) {
             body2.pause();
           }
         }).on("error", (err) => {
@@ -17707,9 +17707,9 @@ var require_api_pipeline = __commonJS({
         });
         this.body = body;
       }
-      onData(chunk) {
+      onData(chunk2) {
         const { res } = this;
-        return res.push(chunk);
+        return res.push(chunk2);
       }
       onComplete(trailers) {
         const { res } = this;
@@ -18587,8 +18587,8 @@ var require_pending_interceptors_formatter = __commonJS({
     module.exports = class PendingInterceptorsFormatter {
       constructor({ disableColors } = {}) {
         this.transform = new Transform({
-          transform(chunk, _enc, cb) {
-            cb(null, chunk);
+          transform(chunk2, _enc, cb) {
+            cb(null, chunk2);
           }
         });
         this.logger = new Console({
@@ -18925,8 +18925,8 @@ var require_dump = __commonJS({
         err = this.#reason ?? err;
         this.#handler.onError(err);
       }
-      onData(chunk) {
-        this.#size = this.#size + chunk.length;
+      onData(chunk2) {
+        this.#size = this.#size + chunk2.length;
         if (this.#size >= this.#maxSize) {
           this.#dumped = true;
           if (this.#aborted) {
@@ -21474,74 +21474,74 @@ var require_fetch = __commonJS({
     async function httpNetworkOrCacheFetch(fetchParams, isAuthenticationFetch = false, isNewConnectionFetch = false) {
       const request = fetchParams.request;
       let httpFetchParams = null;
-      let httpRequest = null;
+      let httpRequest2 = null;
       let response = null;
       const httpCache = null;
       const revalidatingFlag = false;
       if (request.window === "no-window" && request.redirect === "error") {
         httpFetchParams = fetchParams;
-        httpRequest = request;
+        httpRequest2 = request;
       } else {
-        httpRequest = cloneRequest(request);
+        httpRequest2 = cloneRequest(request);
         httpFetchParams = { ...fetchParams };
-        httpFetchParams.request = httpRequest;
+        httpFetchParams.request = httpRequest2;
       }
       const includeCredentials = request.credentials === "include" || request.credentials === "same-origin" && request.responseTainting === "basic";
-      const contentLength = httpRequest.body ? httpRequest.body.length : null;
+      const contentLength = httpRequest2.body ? httpRequest2.body.length : null;
       let contentLengthHeaderValue = null;
-      if (httpRequest.body == null && ["POST", "PUT"].includes(httpRequest.method)) {
+      if (httpRequest2.body == null && ["POST", "PUT"].includes(httpRequest2.method)) {
         contentLengthHeaderValue = "0";
       }
       if (contentLength != null) {
         contentLengthHeaderValue = isomorphicEncode(`${contentLength}`);
       }
       if (contentLengthHeaderValue != null) {
-        httpRequest.headersList.append("content-length", contentLengthHeaderValue, true);
+        httpRequest2.headersList.append("content-length", contentLengthHeaderValue, true);
       }
-      if (contentLength != null && httpRequest.keepalive) {
+      if (contentLength != null && httpRequest2.keepalive) {
       }
-      if (httpRequest.referrer instanceof URL) {
-        httpRequest.headersList.append("referer", isomorphicEncode(httpRequest.referrer.href), true);
+      if (httpRequest2.referrer instanceof URL) {
+        httpRequest2.headersList.append("referer", isomorphicEncode(httpRequest2.referrer.href), true);
       }
-      appendRequestOriginHeader(httpRequest);
-      appendFetchMetadata(httpRequest);
-      if (!httpRequest.headersList.contains("user-agent", true)) {
-        httpRequest.headersList.append("user-agent", defaultUserAgent);
+      appendRequestOriginHeader(httpRequest2);
+      appendFetchMetadata(httpRequest2);
+      if (!httpRequest2.headersList.contains("user-agent", true)) {
+        httpRequest2.headersList.append("user-agent", defaultUserAgent);
       }
-      if (httpRequest.cache === "default" && (httpRequest.headersList.contains("if-modified-since", true) || httpRequest.headersList.contains("if-none-match", true) || httpRequest.headersList.contains("if-unmodified-since", true) || httpRequest.headersList.contains("if-match", true) || httpRequest.headersList.contains("if-range", true))) {
-        httpRequest.cache = "no-store";
+      if (httpRequest2.cache === "default" && (httpRequest2.headersList.contains("if-modified-since", true) || httpRequest2.headersList.contains("if-none-match", true) || httpRequest2.headersList.contains("if-unmodified-since", true) || httpRequest2.headersList.contains("if-match", true) || httpRequest2.headersList.contains("if-range", true))) {
+        httpRequest2.cache = "no-store";
       }
-      if (httpRequest.cache === "no-cache" && !httpRequest.preventNoCacheCacheControlHeaderModification && !httpRequest.headersList.contains("cache-control", true)) {
-        httpRequest.headersList.append("cache-control", "max-age=0", true);
+      if (httpRequest2.cache === "no-cache" && !httpRequest2.preventNoCacheCacheControlHeaderModification && !httpRequest2.headersList.contains("cache-control", true)) {
+        httpRequest2.headersList.append("cache-control", "max-age=0", true);
       }
-      if (httpRequest.cache === "no-store" || httpRequest.cache === "reload") {
-        if (!httpRequest.headersList.contains("pragma", true)) {
-          httpRequest.headersList.append("pragma", "no-cache", true);
+      if (httpRequest2.cache === "no-store" || httpRequest2.cache === "reload") {
+        if (!httpRequest2.headersList.contains("pragma", true)) {
+          httpRequest2.headersList.append("pragma", "no-cache", true);
         }
-        if (!httpRequest.headersList.contains("cache-control", true)) {
-          httpRequest.headersList.append("cache-control", "no-cache", true);
+        if (!httpRequest2.headersList.contains("cache-control", true)) {
+          httpRequest2.headersList.append("cache-control", "no-cache", true);
         }
       }
-      if (httpRequest.headersList.contains("range", true)) {
-        httpRequest.headersList.append("accept-encoding", "identity", true);
+      if (httpRequest2.headersList.contains("range", true)) {
+        httpRequest2.headersList.append("accept-encoding", "identity", true);
       }
-      if (!httpRequest.headersList.contains("accept-encoding", true)) {
-        if (urlHasHttpsScheme(requestCurrentURL(httpRequest))) {
-          httpRequest.headersList.append("accept-encoding", "br, gzip, deflate", true);
+      if (!httpRequest2.headersList.contains("accept-encoding", true)) {
+        if (urlHasHttpsScheme(requestCurrentURL(httpRequest2))) {
+          httpRequest2.headersList.append("accept-encoding", "br, gzip, deflate", true);
         } else {
-          httpRequest.headersList.append("accept-encoding", "gzip, deflate", true);
+          httpRequest2.headersList.append("accept-encoding", "gzip, deflate", true);
         }
       }
-      httpRequest.headersList.delete("host", true);
+      httpRequest2.headersList.delete("host", true);
       if (includeCredentials) {
       }
       if (httpCache == null) {
-        httpRequest.cache = "no-store";
+        httpRequest2.cache = "no-store";
       }
-      if (httpRequest.cache !== "no-store" && httpRequest.cache !== "reload") {
+      if (httpRequest2.cache !== "no-store" && httpRequest2.cache !== "reload") {
       }
       if (response == null) {
-        if (httpRequest.cache === "only-if-cached") {
+        if (httpRequest2.cache === "only-if-cached") {
           return makeNetworkError("only if cached");
         }
         const forwardResponse = await httpNetworkFetch(
@@ -21549,7 +21549,7 @@ var require_fetch = __commonJS({
           includeCredentials,
           isNewConnectionFetch
         );
-        if (!safeMethodsSet.has(httpRequest.method) && forwardResponse.status >= 200 && forwardResponse.status <= 399) {
+        if (!safeMethodsSet.has(httpRequest2.method) && forwardResponse.status >= 200 && forwardResponse.status <= 399) {
         }
         if (revalidatingFlag && forwardResponse.status === 304) {
         }
@@ -21557,8 +21557,8 @@ var require_fetch = __commonJS({
           response = forwardResponse;
         }
       }
-      response.urlList = [...httpRequest.urlList];
-      if (httpRequest.headersList.contains("range", true)) {
+      response.urlList = [...httpRequest2.urlList];
+      if (httpRequest2.headersList.contains("range", true)) {
         response.rangeRequested = true;
       }
       response.requestIncludesCredentials = includeCredentials;
@@ -21848,11 +21848,11 @@ var require_fetch = __commonJS({
               });
               return true;
             },
-            onData(chunk) {
+            onData(chunk2) {
               if (fetchParams.controller.dump) {
                 return;
               }
-              const bytes = chunk;
+              const bytes = chunk2;
               timingInfo.encodedBodySize += bytes.byteLength;
               return this.body.push(bytes);
             },
@@ -22376,8 +22376,8 @@ var require_util4 = __commonJS({
           }
           dataURL += ";base64,";
           const decoder = new StringDecoder("latin1");
-          for (const chunk of bytes) {
-            dataURL += btoa2(decoder.write(chunk));
+          for (const chunk2 of bytes) {
+            dataURL += btoa2(decoder.write(chunk2));
           }
           dataURL += btoa2(decoder.end());
           return dataURL;
@@ -22405,8 +22405,8 @@ var require_util4 = __commonJS({
         case "BinaryString": {
           let binaryString = "";
           const decoder = new StringDecoder("latin1");
-          for (const chunk of bytes) {
-            binaryString += decoder.write(chunk);
+          for (const chunk2 of bytes) {
+            binaryString += decoder.write(chunk2);
           }
           binaryString += decoder.end();
           return binaryString;
@@ -22416,12 +22416,12 @@ var require_util4 = __commonJS({
     function decode(ioQueue, encoding) {
       const bytes = combineByteSequences(ioQueue);
       const BOMEncoding = BOMSniffing(bytes);
-      let slice = 0;
+      let slice2 = 0;
       if (BOMEncoding !== null) {
         encoding = BOMEncoding;
-        slice = BOMEncoding === "UTF-8" ? 3 : 2;
+        slice2 = BOMEncoding === "UTF-8" ? 3 : 2;
       }
-      const sliced = bytes.slice(slice);
+      const sliced = bytes.slice(slice2);
       return new TextDecoder(encoding).decode(sliced);
     }
     function BOMSniffing(ioQueue) {
@@ -24619,8 +24619,8 @@ var require_connection = __commonJS({
         ws[kReadyState] = states.CLOSING;
       }
     }
-    function onSocketData(chunk) {
-      if (!this.ws[kByteParser].write(chunk)) {
+    function onSocketData(chunk2) {
+      if (!this.ws[kByteParser].write(chunk2)) {
         this.pause();
       }
     }
@@ -24698,7 +24698,7 @@ var require_permessage_deflate = __commonJS({
        * @param {boolean} fin Final fragment flag
        * @param {Function} callback Callback function
        */
-      decompress(chunk, fin, callback) {
+      decompress(chunk2, fin, callback) {
         if (!this.#inflate) {
           let windowBits = Z_DEFAULT_WINDOWBITS;
           if (this.#options.serverMaxWindowBits) {
@@ -24732,7 +24732,7 @@ var require_permessage_deflate = __commonJS({
             callback(err);
           });
         }
-        this.#inflate.write(chunk);
+        this.#inflate.write(chunk2);
         if (fin) {
           this.#inflate.write(tail);
         }
@@ -24811,9 +24811,9 @@ var require_receiver = __commonJS({
        * @param {Buffer} chunk
        * @param {() => void} callback
        */
-      _write(chunk, _, callback) {
-        this.#buffers.push(chunk);
-        this.#byteOffset += chunk.length;
+      _write(chunk2, _, callback) {
+        this.#buffers.push(chunk2);
+        this.#byteOffset += chunk2.length;
         this.#loop = true;
         this.run(callback);
       }
@@ -25750,16 +25750,16 @@ var require_eventsource_stream = __commonJS({
        * @param {Function} callback
        * @returns {void}
        */
-      _transform(chunk, _encoding, callback) {
-        if (chunk.length === 0) {
+      _transform(chunk2, _encoding, callback) {
+        if (chunk2.length === 0) {
           callback();
           return;
         }
-        if (this.maxEventSize > 0 && this.chunks.length >= this.maxBufferedChunks && chunk[0] !== LF && chunk[0] !== CR) {
+        if (this.maxEventSize > 0 && this.chunks.length >= this.maxBufferedChunks && chunk2[0] !== LF && chunk2[0] !== CR) {
           callback(createMaxEventSizeExceededError());
           return;
         }
-        this.chunks.push(chunk);
+        this.chunks.push(chunk2);
         if (this.checkBOM) {
           if (this.handleBOM()) {
             callback();
@@ -25966,12 +25966,12 @@ ${value}`;
         const chunks = [];
         let length = 0;
         for (let i = this.lineChunkIndex; i <= this.chunkIndex; i++) {
-          const chunk = this.chunks[i];
+          const chunk2 = this.chunks[i];
           const start = i === this.lineChunkIndex ? this.linePos : 0;
-          const end = i === this.chunkIndex ? this.pos : chunk.length;
-          const slice = chunk.subarray(start, end);
-          length += slice.length;
-          chunks.push(slice);
+          const end = i === this.chunkIndex ? this.pos : chunk2.length;
+          const slice2 = chunk2.subarray(start, end);
+          length += slice2.length;
+          chunks.push(slice2);
         }
         return Buffer.concat(chunks, length);
       }
@@ -25979,10 +25979,10 @@ ${value}`;
         let chunkIndex = this.lineChunkIndex;
         let pos = this.linePos;
         while (chunkIndex < this.chunks.length) {
-          const chunk = this.chunks[chunkIndex];
-          const remaining = chunk.length - pos;
+          const chunk2 = this.chunks[chunkIndex];
+          const remaining = chunk2.length - pos;
           if (offset < remaining) {
-            return chunk[pos + offset];
+            return chunk2[pos + offset];
           }
           offset -= remaining;
           chunkIndex++;
@@ -25991,8 +25991,8 @@ ${value}`;
       }
       discardLeadingBytes(count) {
         while (count > 0 && this.lineChunkIndex < this.chunks.length) {
-          const chunk = this.chunks[this.lineChunkIndex];
-          const remaining = chunk.length - this.linePos;
+          const chunk2 = this.chunks[this.lineChunkIndex];
+          const remaining = chunk2.length - this.linePos;
           if (count < remaining) {
             this.linePos += count;
             count = 0;
@@ -26670,10 +26670,12 @@ var ObjectReader = class _ObjectReader {
     if (value === "true" || value === "false") return value === "true";
     throw new ConfigError(`${key} must be true or false`);
   }
+  /** Accepts numbers and numeric strings. A blank string counts as unset (e.g. an empty step output). */
   optionalInteger(key, min, max) {
     const value = this.take(key);
     if (value === void 0 || value === null) return void 0;
-    const number = typeof value === "string" && value.trim() !== "" ? Number(value) : value;
+    if (typeof value === "string" && value.trim() === "") return void 0;
+    const number = typeof value === "string" ? Number(value) : value;
     if (typeof number !== "number" || !Number.isInteger(number) || number < min || number > max) {
       throw new ConfigError(`${key} must be an integer from ${String(min)} to ${String(max)}`);
     }
@@ -27003,6 +27005,7 @@ async function deliverAll(jobs, options) {
 }
 async function deliver(job, options) {
   const base = { id: job.id, provider: job.provider };
+  const state = /* @__PURE__ */ new Map();
   for (let attempt = 1; ; attempt++) {
     try {
       const result = await job.send({
@@ -27010,7 +27013,8 @@ async function deliver(job, options) {
         timeoutMs: options.timeoutMs,
         attempt,
         fetch: options.fetch,
-        debug: options.debug
+        debug: options.debug,
+        state
       });
       return {
         ...base,
@@ -27577,9 +27581,179 @@ function createCoreIO() {
 }
 
 // src/message/markdown.ts
+var PUNCTUATION = /[!-/:-@[-`{-~]/;
+var ESCAPED_PUNCTUATION = /\\([!-/:-@[-`{-~])/g;
 var SPECIAL = /[\\`*_[\]()]/g;
+var ALPHANUMERIC = /[\p{L}\p{N}]/u;
+var WHITESPACE = /\s/;
+var FENCE_OPEN = /^```([^`]*)$/;
+var FENCE_CLOSE = /^```\s*$/;
 function escapeMarkdown(value) {
   return value.replace(SPECIAL, "\\$&");
+}
+function unescape(value) {
+  return value.replace(ESCAPED_PUNCTUATION, "$1");
+}
+function parseMarkdown(source) {
+  const text2 = source.replace(/\r\n?/g, "\n");
+  const lines = text2.split("\n");
+  const lineStarts = [];
+  let offset = 0;
+  for (const line of lines) {
+    lineStarts.push(offset);
+    offset += line.length + 1;
+  }
+  const nodes = [];
+  let cursor = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const open2 = FENCE_OPEN.exec(lines[i] ?? "");
+    if (!open2) continue;
+    let close = -1;
+    for (let k = i + 1; k < lines.length; k++) {
+      if (FENCE_CLOSE.test(lines[k] ?? "")) {
+        close = k;
+        break;
+      }
+    }
+    if (close === -1) break;
+    nodes.push(...parseInline(text2.slice(cursor, lineStarts[i])));
+    nodes.push({
+      type: "codeblock",
+      language: (open2[1] ?? "").trim(),
+      value: unescape(lines.slice(i + 1, close).join("\n"))
+    });
+    cursor = (lineStarts[close] ?? 0) + (lines[close] ?? "").length;
+    i = close;
+  }
+  nodes.push(...parseInline(text2.slice(cursor)));
+  return mergeText(nodes);
+}
+function parseInline(source) {
+  const items = [];
+  const openers = [];
+  let text2 = "";
+  const flushText = () => {
+    if (text2 !== "") items.push({ type: "text", value: text2 });
+    text2 = "";
+  };
+  const findOpener = (marker) => {
+    for (let k = openers.length - 1; k >= 0; k--) {
+      const index = openers[k] ?? -1;
+      const item = items[index];
+      if (item?.type === "delimiter" && item.marker === marker) return index;
+    }
+    return -1;
+  };
+  const close = (index, build) => {
+    const children = finalize(items.splice(index).slice(1));
+    items.push(build(children));
+    while ((openers.at(-1) ?? -1) >= index) openers.pop();
+  };
+  const isEmptySpan = (index) => index === items.length - 1 && text2 === "";
+  let i = 0;
+  while (i < source.length) {
+    const ch = source.charAt(i);
+    if (ch === "\\" && PUNCTUATION.test(source.charAt(i + 1))) {
+      text2 += source.charAt(i + 1);
+      i += 2;
+      continue;
+    }
+    if (ch === "`") {
+      const end = findUnescaped(source, "`", i + 1);
+      if (end === -1 || end === i + 1) {
+        text2 += ch;
+        i++;
+        continue;
+      }
+      flushText();
+      items.push({ type: "code", value: unescape(source.slice(i + 1, end)) });
+      i = end + 1;
+      continue;
+    }
+    if (ch === "*" || ch === "_") {
+      const marker = ch === "*" && source.charAt(i + 1) === "*" ? "**" : ch;
+      const before = source.charAt(i - 1);
+      const after = source.charAt(i + marker.length);
+      let canOpen = after !== "" && !WHITESPACE.test(after);
+      let canClose = before !== "" && !WHITESPACE.test(before);
+      if (marker === "_") {
+        canOpen &&= !ALPHANUMERIC.test(before);
+        canClose &&= !ALPHANUMERIC.test(after);
+      }
+      const opener = canClose ? findOpener(marker) : -1;
+      if (opener !== -1 && !isEmptySpan(opener)) {
+        flushText();
+        close(opener, (children) => ({ type: marker === "**" ? "bold" : "italic", children }));
+      } else if (canOpen) {
+        flushText();
+        openers.push(items.length);
+        items.push({ type: "delimiter", marker });
+      } else {
+        text2 += marker;
+      }
+      i += marker.length;
+      continue;
+    }
+    if (ch === "[") {
+      flushText();
+      openers.push(items.length);
+      items.push({ type: "delimiter", marker: "[" });
+      i++;
+      continue;
+    }
+    if (ch === "]") {
+      const opener = findOpener("[");
+      const target = opener === -1 ? null : parseLinkTarget(source, i + 1);
+      if (target && !isEmptySpan(opener)) {
+        flushText();
+        close(opener, (children) => ({ type: "link", url: target.url, children }));
+        i = target.end;
+        continue;
+      }
+    }
+    text2 += ch;
+    i++;
+  }
+  flushText();
+  return finalize(items);
+}
+function findUnescaped(source, char, from) {
+  for (let i = from; i < source.length; i++) {
+    const ch = source.charAt(i);
+    if (ch === "\\" && PUNCTUATION.test(source.charAt(i + 1))) i++;
+    else if (ch === char) return i;
+  }
+  return -1;
+}
+function parseLinkTarget(source, from) {
+  if (source.charAt(from) !== "(") return null;
+  let depth = 0;
+  for (let i = from + 1; i < source.length; i++) {
+    const ch = source.charAt(i);
+    if (ch === "\\" && PUNCTUATION.test(source.charAt(i + 1))) i++;
+    else if (ch === "\n") return null;
+    else if (ch === "(") depth++;
+    else if (ch === ")" && depth > 0) depth--;
+    else if (ch === ")") {
+      const url = unescape(source.slice(from + 1, i)).trim();
+      return url === "" ? null : { url, end: i + 1 };
+    }
+  }
+  return null;
+}
+function finalize(items) {
+  return mergeText(
+    items.map((item) => item.type === "delimiter" ? { type: "text", value: item.marker } : item)
+  );
+}
+function mergeText(nodes) {
+  const merged = [];
+  for (const node of nodes) {
+    const last = merged.at(-1);
+    if (node.type === "text" && last?.type === "text") last.value += node.value;
+    else if (node.type !== "text" || node.value !== "") merged.push(node);
+  }
+  return merged;
 }
 
 // src/message/template.ts
@@ -27658,9 +27832,430 @@ var ProviderRegistry = class {
   }
 };
 
+// src/providers/http.ts
+async function httpRequest(context, request) {
+  try {
+    return await context.fetch(request.url, {
+      method: request.method,
+      ...request.headers ? { headers: request.headers } : {},
+      ...request.body === void 0 ? {} : { body: request.body },
+      signal: context.signal
+    });
+  } catch (error2) {
+    if (error2 instanceof Error && (error2.name === "TimeoutError" || error2.name === "AbortError")) {
+      const seconds = String(Math.round(context.timeoutMs / 1e3));
+      throw new DeliveryError(`request timed out after ${seconds}s`, { retryable: true });
+    }
+    const code = error2 instanceof Error ? errorCode(error2.cause) : void 0;
+    throw new DeliveryError(code ? `network error (${code})` : "network error", {
+      retryable: true
+    });
+  }
+}
+function errorCode(cause) {
+  if (typeof cause !== "object" || cause === null || !("code" in cause)) return void 0;
+  return typeof cause.code === "string" && /^[A-Z0-9_]+$/.test(cause.code) ? cause.code : void 0;
+}
+function httpStatusError(response, detail = "", retryAfterMs = parseRetryAfter(response.headers.get("retry-after"))) {
+  const { status } = response;
+  const message = `HTTP ${String(status)}${detail ? `: ${detail}` : ""}`;
+  const retryable = status === 429 || status >= 500;
+  return new DeliveryError(message, {
+    retryable,
+    retryAfterMs: retryable ? retryAfterMs : void 0
+  });
+}
+function parseRetryAfter(value, now = Date.now()) {
+  if (value === null || value.trim() === "") return void 0;
+  if (/^\d+$/.test(value.trim())) return Number(value.trim()) * 1e3;
+  const date = Date.parse(value);
+  return Number.isNaN(date) ? void 0 : Math.max(0, date - now);
+}
+
+// src/providers/telegram/format.ts
+var PARSE_MODES = ["html", "markdownv2", "none"];
+function escapeHtml(text2) {
+  return text2.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+var escapeHtmlAttribute = (text2) => escapeHtml(text2).replaceAll('"', "&quot;");
+function escapeMarkdownV2(text2) {
+  return text2.replace(/[_*[\]()~`>#+\-=|{}.!\\]/g, "\\$&");
+}
+var escapeMarkdownV2Code = (text2) => text2.replace(/[`\\]/g, "\\$&");
+var escapeMarkdownV2Url = (text2) => text2.replace(/[)\\]/g, "\\$&");
+var identity2 = (text2) => text2;
+var SYNTAX = {
+  html: {
+    escape: escapeHtml,
+    codeEscape: escapeHtml,
+    bold: () => ({ open: "<b>", close: "</b>" }),
+    italic: () => ({ open: "<i>", close: "</i>" }),
+    code: () => ({ open: "<code>", close: "</code>" }),
+    pre: (language) => language ? {
+      open: `<pre><code class="language-${escapeHtmlAttribute(language)}">`,
+      close: "</code></pre>"
+    } : { open: "<pre>", close: "</pre>" },
+    link: (url) => ({ open: `<a href="${escapeHtmlAttribute(url)}">`, close: "</a>" })
+  },
+  markdownv2: {
+    escape: escapeMarkdownV2,
+    codeEscape: escapeMarkdownV2Code,
+    bold: () => ({ open: "*", close: "*" }),
+    italic: () => ({ open: "_", close: "_" }),
+    code: () => ({ open: "`", close: "`" }),
+    pre: (language) => ({ open: `\`\`\`${language.replace(/[^\w+#-]/g, "")}
+`, close: "\n```" }),
+    link: (url) => ({ open: "[", close: `](${escapeMarkdownV2Url(url)})` })
+  },
+  none: {
+    escape: identity2,
+    codeEscape: identity2,
+    bold: () => void 0,
+    italic: () => void 0,
+    code: () => void 0,
+    pre: () => void 0,
+    link: () => void 0
+  }
+};
+function escapeFor(mode) {
+  return SYNTAX[mode].escape;
+}
+var withMark = (marks, mark) => mark ? [...marks, mark] : marks;
+function markdownRuns(nodes, syntax, marks) {
+  const text2 = (value, m = marks) => ({
+    text: value,
+    marks: m,
+    escape: syntax.escape
+  });
+  return nodes.flatMap((node) => {
+    switch (node.type) {
+      case "text":
+        return [text2(node.value)];
+      case "bold":
+        return markdownRuns(node.children, syntax, withMark(marks, syntax.bold()));
+      case "italic":
+        return markdownRuns(node.children, syntax, withMark(marks, syntax.italic()));
+      // Telegram does not allow code inside other entities, so code drops the outer marks.
+      case "code":
+        return [
+          { text: node.value, marks: withMark([], syntax.code()), escape: syntax.codeEscape }
+        ];
+      case "codeblock":
+        return [
+          {
+            text: node.value,
+            marks: withMark([], syntax.pre(node.language)),
+            escape: syntax.codeEscape
+          }
+        ];
+      case "link": {
+        const mark = syntax.link(node.url);
+        if (mark) return markdownRuns(node.children, syntax, [...marks, mark]);
+        const label = markdownRuns(node.children, syntax, marks);
+        const labelText = label.map((r) => r.text).join("");
+        return labelText === node.url ? label : [...label, text2(` (${node.url})`)];
+      }
+    }
+  });
+}
+var HTML_TOKEN = /<\/?([a-zA-Z][\w-]*)\b[^<>]*>|&(#\d+|#x[0-9a-fA-F]+|lt|gt|amp|quot);|[^<&]+|[<&]/g;
+function decodeEntity(entity) {
+  switch (entity) {
+    case "lt":
+      return "<";
+    case "gt":
+      return ">";
+    case "amp":
+      return "&";
+    case "quot":
+      return '"';
+  }
+  const code = entity.startsWith("#x") ? parseInt(entity.slice(2), 16) : parseInt(entity.slice(1), 10);
+  return code > 0 && code <= 1114111 ? String.fromCodePoint(code) : "";
+}
+function htmlRuns(html) {
+  const runs = [];
+  const stack = [];
+  for (const match of html.matchAll(HTML_TOKEN)) {
+    const [token, tagName, entity] = match;
+    const marks = stack.map((s) => s.mark);
+    if (tagName !== void 0) {
+      const name = tagName.toLowerCase();
+      if (token.startsWith("</")) {
+        const index = stack.findLastIndex((s) => s.name === name);
+        if (index !== -1) stack.splice(index);
+      } else {
+        stack.push({ name, mark: { open: token, close: `</${name}>` } });
+      }
+    } else {
+      runs.push({
+        text: entity === void 0 ? token : decodeEntity(entity),
+        marks,
+        escape: escapeHtml
+      });
+    }
+  }
+  return runs;
+}
+var LINE = "\n";
+var BLOCK = "\n\n";
+function isButtonUrl(url) {
+  try {
+    return ["http:", "https:", "tg:"].includes(new URL(url).protocol);
+  } catch {
+    return false;
+  }
+}
+function messageRuns(message, mode) {
+  const syntax = SYNTAX[mode];
+  const plain = (text2, marks = []) => ({
+    text: text2,
+    marks,
+    escape: syntax.escape
+  });
+  const blocks = [];
+  if (message.title !== "") blocks.push([plain(message.title, withMark([], syntax.bold()))]);
+  if (message.body !== "") {
+    switch (message.format) {
+      case "text":
+        blocks.push([plain(message.body)]);
+        break;
+      case "markdown":
+        blocks.push(markdownRuns(parseMarkdown(message.body), syntax, []));
+        break;
+      case "raw":
+        blocks.push(
+          mode === "html" ? htmlRuns(message.body) : [{ text: message.body, marks: [], escape: identity2 }]
+        );
+        break;
+    }
+  }
+  const lines = message.fields.map((field2) => [
+    plain(`${field2.name}:`, withMark([], syntax.bold())),
+    plain(` ${field2.value}`)
+  ]);
+  for (const link of message.links.filter((l) => !isButtonUrl(l.url))) {
+    lines.push([plain(link.label === link.url ? link.url : `${link.label}: ${link.url}`)]);
+  }
+  if (lines.length > 0)
+    blocks.push(lines.flatMap((line, i) => i === 0 ? line : [plain(LINE), ...line]));
+  return blocks.flatMap((block, i) => i === 0 ? block : [plain(BLOCK), ...block]);
+}
+
+// src/providers/telegram/config.ts
+var TOKEN = /^\d+:[A-Za-z0-9_-]+$/;
+var CHAT_ID = /^(-?\d+|@[A-Za-z][A-Za-z0-9_]{3,})$/;
+var MAX_ID = Number.MAX_SAFE_INTEGER;
+function validateConfig(raw) {
+  const reader = ObjectReader.from(raw, "Telegram options");
+  const token = reader.requiredString("token").trim();
+  if (!TOKEN.test(token)) throw new ConfigError("token does not look like a Telegram bot token");
+  const chatId = reader.requiredString("chat_id").trim();
+  if (!CHAT_ID.test(chatId)) {
+    throw new ConfigError("chat_id must be a numeric chat ID or an @channel username");
+  }
+  const config = {
+    token,
+    chatId,
+    topicId: reader.optionalInteger("topic_id", 1, MAX_ID),
+    parseMode: reader.optionalEnum("parse_mode", PARSE_MODES) ?? "html",
+    silent: reader.optionalBoolean("silent") ?? false,
+    disableLinkPreview: reader.optionalBoolean("disable_link_preview") ?? false,
+    replyToMessageId: reader.optionalInteger("reply_to_message_id", 1, MAX_ID),
+    editMessageId: reader.optionalInteger("edit_message_id", 1, MAX_ID),
+    split: reader.optionalBoolean("split") ?? true
+  };
+  reader.assertNoUnknownKeys();
+  return config;
+}
+
+// src/providers/telegram/errors.ts
+function isApiError(value) {
+  return typeof value === "object" && value !== null && "ok" in value && value.ok === false;
+}
+var HINTS = [
+  [/chat not found/i, "check chat_id, and that the bot has been added to the chat"],
+  [/message thread not found|topic/i, "check topic_id, and that the chat has topics enabled"],
+  [/bot was blocked by the user/i, "the user blocked the bot; ask them to unblock it"],
+  [/bot was kicked|bot is not a member/i, "add the bot to the chat again"],
+  [/not enough rights|have no rights/i, "give the bot permission to post in this chat"],
+  [/can't parse entities/i, "the formatting is invalid; check raw bodies against parse_mode"],
+  [/message to edit not found/i, "check edit_message_id"],
+  [/message text is empty/i, "the message is empty after rendering"],
+  [/message is too long/i, "enable split, or shorten the message"]
+];
+function apiError(response, body) {
+  if (!isApiError(body)) return httpStatusError(response);
+  const status = body.error_code ?? response.status;
+  const description = body.description ?? `HTTP ${String(status)}`;
+  const retryAfter = body.parameters?.retry_after;
+  const retryAfterMs = typeof retryAfter === "number" ? retryAfter * 1e3 : parseRetryAfter(response.headers.get("retry-after"));
+  if (status === 429 || status >= 500) {
+    return new DeliveryError(`Telegram ${description}`, { retryable: true, retryAfterMs });
+  }
+  let hint;
+  if (status === 401) hint = "the bot token is invalid or was revoked";
+  else if (typeof body.parameters?.migrate_to_chat_id === "number") {
+    hint = `the group is now a supergroup; use chat_id ${String(body.parameters.migrate_to_chat_id)}`;
+  } else {
+    hint = HINTS.find(([pattern]) => pattern.test(description))?.[1];
+  }
+  return new DeliveryError(`Telegram ${description}${hint ? ` (${hint})` : ""}`, {
+    retryable: false
+  });
+}
+
+// src/providers/telegram/runs.ts
+function serialize(runs) {
+  let out = "";
+  let open2 = [];
+  for (const run2 of runs) {
+    let common = 0;
+    while (common < open2.length && open2[common] === run2.marks[common]) common++;
+    for (let k = open2.length - 1; k >= common; k--) out += open2[k]?.close ?? "";
+    for (let k = common; k < run2.marks.length; k++) out += run2.marks[k]?.open ?? "";
+    open2 = run2.marks;
+    out += run2.escape(run2.text);
+  }
+  for (let k = open2.length - 1; k >= 0; k--) out += open2[k]?.close ?? "";
+  return out;
+}
+function slice(runs, start, end) {
+  const result = [];
+  let offset = 0;
+  for (const run2 of runs) {
+    const from = Math.max(start, offset);
+    const to = Math.min(end, offset + run2.text.length);
+    if (from < to) result.push({ ...run2, text: run2.text.slice(from - offset, to - offset) });
+    offset += run2.text.length;
+    if (offset >= end) break;
+  }
+  return result;
+}
+var SEPARATORS = ["\n\n", "\n", " "];
+var WHITESPACE2 = /\s/;
+function splitRuns(runs, limit) {
+  const text2 = runs.map((run2) => run2.text).join("");
+  const chunks = [];
+  let start = 0;
+  while (start < text2.length) {
+    let cut = Math.min(start + limit, text2.length);
+    let next = cut;
+    if (cut < text2.length) {
+      const window = text2.slice(start, cut);
+      const found = SEPARATORS.map((sep) => ({ sep, at: window.lastIndexOf(sep) })).find(
+        ({ at }) => at >= limit / 2
+      );
+      if (found) {
+        cut = start + found.at;
+        next = cut + found.sep.length;
+      } else if (/[\uD800-\uDBFF]/.test(text2.charAt(cut - 1))) {
+        cut--;
+        next = cut;
+      }
+    }
+    let from = start;
+    while (from < cut && WHITESPACE2.test(text2.charAt(from))) from++;
+    let to = cut;
+    while (to > from && WHITESPACE2.test(text2.charAt(to - 1))) to--;
+    if (from < to) chunks.push(slice(runs, from, to));
+    start = next;
+  }
+  return chunks;
+}
+
+// src/providers/telegram/index.ts
+var API_URL = "https://api.telegram.org";
+var MESSAGE_LIMIT = 4096;
+var BUTTONS_PER_ROW = 2;
+var PARSE_MODE = { html: "HTML", markdownv2: "MarkdownV2", none: void 0 };
+function chunk(runs, config) {
+  const single = !config.split || config.editMessageId !== void 0;
+  if (!single) return splitRuns(runs, MESSAGE_LIMIT).map(serialize);
+  const [first, ...rest] = splitRuns(runs, MESSAGE_LIMIT - 1);
+  if (!first) return [];
+  const ellipsis = { text: "\u2026", marks: [], escape: (text2) => text2 };
+  return [serialize(rest.length > 0 ? [...first, ellipsis] : first)];
+}
+var telegram = {
+  id: "telegram",
+  validate: validateConfig,
+  secrets: (config) => [config.token],
+  escapeRaw: (value, config) => escapeFor(config.parseMode)(value),
+  render(message, config) {
+    const texts = chunk(messageRuns(message, config.parseMode), config);
+    if (texts.length === 0) {
+      throw new Error("nothing to send: the title, message and fields are all empty");
+    }
+    const buttons = message.links.filter((link) => isButtonUrl(link.url)).map((link) => ({ text: link.label, url: link.url }));
+    const rows = [];
+    for (let i = 0; i < buttons.length; i += BUTTONS_PER_ROW) {
+      rows.push(buttons.slice(i, i + BUTTONS_PER_ROW));
+    }
+    const parseMode = PARSE_MODE[config.parseMode];
+    const common = {
+      chat_id: config.chatId,
+      ...parseMode ? { parse_mode: parseMode } : {},
+      ...config.disableLinkPreview ? { link_preview_options: { is_disabled: true } } : {}
+    };
+    const keyboard = rows.length > 0 ? { reply_markup: { inline_keyboard: rows } } : {};
+    if (config.editMessageId !== void 0) {
+      return {
+        method: "editMessageText",
+        requests: [{ ...common, message_id: config.editMessageId, text: texts[0], ...keyboard }]
+      };
+    }
+    return {
+      method: "sendMessage",
+      requests: texts.map((text2, i) => ({
+        ...common,
+        ...config.topicId === void 0 ? {} : { message_thread_id: config.topicId },
+        text: text2,
+        ...config.silent ? { disable_notification: true } : {},
+        // Only the first chunk replies; only the last carries the buttons.
+        ...i === 0 && config.replyToMessageId !== void 0 ? {
+          reply_parameters: {
+            message_id: config.replyToMessageId,
+            allow_sending_without_reply: true
+          }
+        } : {},
+        ...i === texts.length - 1 ? keyboard : {}
+      }))
+    };
+  },
+  async send(rendered, config, context) {
+    let sent = context.state.get("sent") ?? 0;
+    let firstId = context.state.get("firstMessageId");
+    for (const request of rendered.requests.slice(sent)) {
+      const response = await httpRequest(context, {
+        method: "POST",
+        url: `${API_URL}/bot${config.token}/${rendered.method}`,
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(request)
+      });
+      const body = await response.json().catch(() => void 0);
+      if (!response.ok) {
+        const error2 = apiError(response, body);
+        if (rendered.method === "editMessageText" && /message is not modified/i.test(error2.message)) {
+          return { messageId: String(config.editMessageId) };
+        }
+        throw error2;
+      }
+      const messageId = body?.result?.message_id;
+      firstId ??= rendered.method === "editMessageText" ? String(config.editMessageId) : typeof messageId === "number" ? String(messageId) : void 0;
+      context.state.set("sent", ++sent);
+      if (firstId !== void 0) context.state.set("firstMessageId", firstId);
+      if (rendered.requests.length > 1) {
+        context.debug(`telegram: sent chunk ${String(sent)}/${String(rendered.requests.length)}`);
+      }
+    }
+    return firstId === void 0 ? {} : { messageId: firstId };
+  }
+};
+
 // src/providers/index.ts
 function createDefaultRegistry() {
-  return new ProviderRegistry();
+  return new ProviderRegistry().register(telegram);
 }
 
 // src/report/redact.ts
@@ -27717,11 +28312,11 @@ function writeOutputs(io, redactor, results) {
   io.setOutput("success-count", String(succeeded));
   io.setOutput("failure-count", String(results.length - succeeded));
 }
-function escapeHtml(value) {
+function escapeHtml2(value) {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 }
 function renderSummary(redactor, results, dryRun) {
-  const cell = (value) => `<td>${escapeHtml(redactor.redact(value))}</td>`;
+  const cell = (value) => `<td>${escapeHtml2(redactor.redact(value))}</td>`;
   const rows = results.map((r) => {
     const status = dryRun ? "\u{1F4DD} dry run" : r.ok ? "\u2705 sent" : `\u274C failed: ${r.error ?? "unknown error"}`;
     return `<tr>${cell(r.id)}${cell(r.provider)}${cell(status)}${cell(String(r.attempts))}</tr>`;
