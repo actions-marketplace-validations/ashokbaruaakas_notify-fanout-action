@@ -1,0 +1,114 @@
+name: E2E (Telegram)
+
+# Sends real messages with a test bot. Needs the TELEGRAM_BOT_TOKEN and
+# TELEGRAM_CHAT_ID secrets; set the TELEGRAM_TOPIC_ID variable to also test a
+# forum topic (TELEGRAM_CHAT_ID must then be a forum supergroup).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency: e2e
+
+jobs:
+  telegram:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Simple mode
+        id: simple
+        uses: ./
+        with:
+          status: success
+          preset: workflow
+          telegram-bot-token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          telegram-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Multi-target, started
+        id: started
+        uses: ./
+        with:
+          status: started
+          title: '{{EMOJI}} E2E run #{{RUN_NUMBER}} {{STATUS}}'
+          targets: |
+            - id: html
+              provider: telegram
+              token: "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+              chat_id: "${{ secrets.TELEGRAM_CHAT_ID }}"
+              silent: true
+            - id: markdownv2
+              provider: telegram
+              token: "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+              chat_id: "${{ secrets.TELEGRAM_CHAT_ID }}"
+              parse_mode: markdownv2
+              format: markdown
+              silent: true
+              message: "**Escaping** check: `<b>&</b>` 1.5! _(x)_ #tag {y} [run]({{RUN_URL}}) on {{BRANCH}}"
+            - id: none
+              provider: telegram
+              token: "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+              chat_id: "${{ secrets.TELEGRAM_CHAT_ID }}"
+              parse_mode: none
+              disable_link_preview: true
+              silent: true
+
+      - name: Write a long template
+        run: |
+          {
+            echo '**Split check** ({{RUN_URL}})'
+            for i in $(seq 1 150); do echo "Line $i: <tag> & **bold** \`code\` padding padding padding"; done
+          } > .e2e-long.md
+
+      - name: Long message is split
+        id: long
+        uses: ./
+        with:
+          status: info
+          format: markdown
+          template-file: .e2e-long.md
+          targets: |
+            - provider: telegram
+              token: "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+              chat_id: "${{ secrets.TELEGRAM_CHAT_ID }}"
+              silent: true
+
+      - name: Edit the started message in place
+        id: edited
+        uses: ./
+        with:
+          status: success
+          title: '{{EMOJI}} E2E run #{{RUN_NUMBER}} {{STATUS}}'
+          targets: |
+            - provider: telegram
+              token: "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+              chat_id: "${{ secrets.TELEGRAM_CHAT_ID }}"
+              edit_message_id: "${{ fromJSON(steps.started.outputs.results)[0].message_id }}"
+
+      - name: Forum topic
+        id: topic
+        if: vars.TELEGRAM_TOPIC_ID != ''
+        uses: ./
+        with:
+          status: success
+          targets: |
+            - provider: telegram
+              token: "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+              chat_id: "${{ secrets.TELEGRAM_CHAT_ID }}"
+              topic_id: "${{ vars.TELEGRAM_TOPIC_ID }}"
+
+      - name: Check results
+        env:
+          SIMPLE: ${{ steps.simple.outputs.results }}
+          STARTED: ${{ steps.started.outputs.results }}
+          LONG: ${{ steps.long.outputs.results }}
+          EDITED: ${{ steps.edited.outputs.results }}
+        run: |
+          for name in SIMPLE STARTED LONG EDITED; do
+            echo "$name: ${!name}"
+            echo "${!name}" | jq -e 'length > 0 and all(.ok)' > /dev/null
+          done
+          test "$(echo "$STARTED" | jq length)" = 3
+          echo "$STARTED" | jq -e 'all(.message_id != null)' > /dev/null
+          test "$(echo "$EDITED" | jq -r '.[0].message_id')" = "$(echo "$STARTED" | jq -r '.[0].message_id')"

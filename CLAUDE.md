@@ -13,7 +13,7 @@ Notify Fanout is a GitHub Action (TypeScript, bundled JavaScript action, not Doc
 Node 24 (`.nvmrc`; the action itself runs on `node24`).
 
 - `npm run all`: format check, lint, typecheck, test, build. Run this before committing.
-- `npm test`: Vitest, once. `npx vitest run src/main.test.ts` runs one file; add `-t "<name>"` for one test. `npm run test:watch` watches.
+- `npm test`: Vitest, once. Live Telegram checks run in the manual `e2e.yml` workflow (`gh workflow run e2e.yml`), which needs the `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` secrets. `npx vitest run src/main.test.ts` runs one file; add `-t "<name>"` for one test. `npm run test:watch` watches.
 - `npm run lint` / `npm run typecheck` / `npm run format`
 - `npm run build`: bundles `src/index.ts` into `dist/index.js` with esbuild (`scripts/build.mjs`).
 
@@ -54,7 +54,8 @@ The code is split into six layers that must stay independent. `src/main.ts` only
 - **`fail-on`:** `any` (default) fails the step if any target failed. `all` fails it only if every target failed. `none` only warns.
 - **Secrets:** call `core.setSecret` on every secret before any logging. The runner masks secrets only in logs, so all logs, outputs and the job summary also pass through `Redactor`. Redact individual values, not serialized JSON, so outputs stay valid. Telegram tokens sit in the request URL path, so redact URLs in all logs and error messages. Never log full payloads or headers outside `debug`, and keep `debug` masked too.
 - **Naming:** `action.yml` inputs use kebab-case. Keys inside `targets` entries use snake_case.
-- **Telegram:** the message limit is 4096 characters. Split at paragraph or line boundaries, and never break HTML tags (close and reopen them across chunks). Edit-in-place is stateless: `message_id` comes back through the `results` output and a later step passes it in as `edit_message_id`.
+- **Telegram** (`src/providers/telegram/`): the message is built as text runs with formatting marks (`runs.ts`). Splitting counts visible characters only (the 4096 limit applies after entity parsing), and each chunk is serialized independently, so tags are always balanced. Raw HTML bodies are parsed into runs too; raw MarkdownV2 bodies cannot be, so they split as plain text. Edits and `split: false` cut to one chunk with "…". Telegram does not allow code inside other entities, so code runs drop their outer marks. Links become inline buttons, two per row on the last chunk; URLs that aren't http(s) or tg:// are listed as text instead. Edit-in-place is stateless: `message_id` (the first chunk's) comes back in the `results` output, and a later step passes it in as `edit_message_id`. "message is not modified" counts as success.
+- **Multi-request sends:** `SendContext.state` persists across retry attempts of one target. Telegram records the chunks it has delivered, so a retry resumes instead of resending them.
 
 ## Working agreement (spec §10)
 
